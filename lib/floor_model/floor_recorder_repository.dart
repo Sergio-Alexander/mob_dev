@@ -18,7 +18,7 @@ class RecorderRepository {
     return await emotionRecorderDao.findAllEmotionRecorders();
   }
 
-  Stream<EmotionRecorderEntity> getEmotionRecordingById(int id) {
+  Stream<EmotionRecorderEntity?> getEmotionRecordingById(int id) {
     return emotionRecorderDao.findEmotionRecorderById(id);
   }
 
@@ -39,7 +39,7 @@ class RecorderRepository {
     return await workoutRecorderDao.findAllWorkoutRecorders();
   }
 
-  Stream<WorkoutRecorderEntity> getWorkoutRecordingById(int id) {
+  Stream<WorkoutRecorderEntity?> getWorkoutRecordingById(int id) {
     return workoutRecorderDao.findWorkoutRecorderById(id);
   }
 
@@ -60,7 +60,7 @@ class RecorderRepository {
     return await dietRecorderDao.findAllDietRecorders();
   }
 
-  Stream<DietRecorderEntity> getDietRecordingById(int id) {
+  Stream<DietRecorderEntity?> getDietRecordingById(int id) {
     return dietRecorderDao.findDietRecorderById(id);
   }
 

@@ -19,6 +19,10 @@ final GoRouter _router = GoRouter(
       path: '/workout',
       builder: (BuildContext context, GoRouterState state) => WorkoutRecorder(),
     ),
+    GoRoute(
+      path: '/:_(.*)',
+      builder: (BuildContext context, GoRouterState state) => EmotionRecorder(), // default page
+    ),
   ],
 );
 

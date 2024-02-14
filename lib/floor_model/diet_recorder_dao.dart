@@ -7,7 +7,7 @@ abstract class DietRecorderDao {
   Future<List<DietRecorderEntity>> findAllDietRecorders();
 
   @Query('SELECT * FROM diet_recorder WHERE id = :id')
-  Stream<DietRecorderEntity> findDietRecorderById(int id);
+  Stream<DietRecorderEntity?> findDietRecorderById(int id);
 
   @insert
   Future<int> insertDietRecorder(DietRecorderEntity recorder);

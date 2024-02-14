@@ -7,7 +7,7 @@ abstract class WorkoutRecorderDao {
   Future<List<WorkoutRecorderEntity>> findAllWorkoutRecorders();
 
   @Query('SELECT * FROM workout_recorder WHERE id = :id')
-  Stream<WorkoutRecorderEntity> findWorkoutRecorderById(int id);
+  Stream<WorkoutRecorderEntity?> findWorkoutRecorderById(int id);
 
   @insert
   Future<int> insertWorkoutRecorder(WorkoutRecorderEntity recorder);

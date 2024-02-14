@@ -6,8 +6,11 @@ abstract class EmotionRecorderDao {
   @Query('SELECT * FROM emotion_recorder')
   Future<List<EmotionRecorderEntity>> findAllEmotionRecorders();
 
+  // @Query('SELECT * FROM emotion_recorder WHERE id = :id')
+  // Stream<EmotionRecorderEntity> findEmotionRecorderById(int id);
+
   @Query('SELECT * FROM emotion_recorder WHERE id = :id')
-  Stream<EmotionRecorderEntity> findEmotionRecorderById(int id);
+  Stream<EmotionRecorderEntity?> findEmotionRecorderById(int id);
 
   @insert
   Future<int> insertEmotionRecorder(EmotionRecorderEntity recorder);
