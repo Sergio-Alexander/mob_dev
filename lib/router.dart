@@ -4,26 +4,22 @@ import 'emotion_recorder.dart';
 import 'diet_recorder.dart';
 import 'workout_recorder.dart';
 
-final GoRouter router = GoRouter(
+final GoRouter _router = GoRouter(
   initialLocation: '/emotion',
   routes: [
     GoRoute(
       path: '/emotion',
-      builder: (context, state) =>  const EmotionRecorder()
+      builder: (BuildContext context, GoRouterState state) => EmotionRecorder(),
     ),
-  //   GoRoute(
-  //     path: '/diet',
-  //     pageBuilder: (context, state) => MaterialPage<void>(
-  //       key: state.pageKey,
-  //       child: DietRecorder(),
-  //     ),
-  //   ),
-  //   GoRoute(
-  //     path: '/workout',
-  //     pageBuilder: (context, state) => MaterialPage<void>(
-  //       key: state.pageKey,
-  //       child: WorkoutRecorder(),
-  //     ),
-  //   ),
-   ],
+    GoRoute(
+      path: '/diet',
+      builder: (BuildContext context, GoRouterState state) => DietRecorder(),
+    ),
+    GoRoute(
+      path: '/workout',
+      builder: (BuildContext context, GoRouterState state) => WorkoutRecorder(),
+    ),
+  ],
 );
+
+GoRouter get appRouter => _router;

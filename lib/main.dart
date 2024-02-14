@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mob_dev/router.dart';
 
-//
 import 'package:provider/provider.dart';
 import 'app_status.dart';
 import 'emotion_recorder.dart';
@@ -9,6 +7,8 @@ import 'diet_recorder.dart';
 import 'workout_recorder.dart';
 
 import 'package:go_router/go_router.dart';
+
+import 'router.dart';
 
 
 void main() {
@@ -20,7 +20,71 @@ void main() {
   );
 }
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'My App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      routerDelegate: appRouter.routerDelegate,
+      routeInformationParser: appRouter.routeInformationParser,
+
+    );
+  }
+}
+
 //
+// class MyApp extends StatelessWidget {
+//   MyApp({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp.router(
+//       title: 'My App',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       routerDelegate: router.routerDelegate,
+//       routeInformationParser: router.routeInformationParser,
+//       builder: (context, child) {
+//         return Scaffold(
+//           appBar: AppBar(
+//             title: Text('My App'),
+//           ),
+//           body: child,
+//           bottomNavigationBar: BottomNavigationBar(
+//             items: const <BottomNavigationBarItem>[
+//               BottomNavigationBarItem(
+//                 icon: Icon(Icons.sentiment_very_satisfied),
+//                 label: 'Emotion',
+//               ),
+//               BottomNavigationBarItem(
+//                 icon: Icon(Icons.fastfood),
+//                 label: 'Diet',
+//               ),
+//               BottomNavigationBarItem(
+//                 icon: Icon(Icons.fitness_center),
+//                 label: 'Workout',
+//               ),
+//             ],
+//             onTap: (index) {
+//               // Update navigation logic based on index
+//               if (index == 0) {
+//                 context.go('/emotion');
+//               } else if (index == 1) {
+//                 context.go('/diet');
+//               } else if (index == 2) {
+//                 context.go('/workout');
+//               }
+//             },
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
+
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});
 //
@@ -40,59 +104,6 @@ void main() {
 //   }
 // }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'My App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routerDelegate: router.routerDelegate,
-      routeInformationParser: router.routeInformationParser,
-      builder: (context, router) {
-        return ChangeNotifierProvider(
-          create: (context) => RecordingState(),
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text('My App'),
-            ),
-            body: router,
-            bottomNavigationBar: BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.sentiment_very_satisfied),
-                  label: 'Emotion',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.fastfood),
-                  label: 'Diet',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.fitness_center),
-                  label: 'Workout',
-                ),
-              ],
-              onTap: (index) {
-                switch (index) {
-                  case 0:
-                    GoRouter.of(context).push('/emotion');
-                    break;
-                  case 1:
-                    GoRouter.of(context).push('/diet');
-                    break;
-                  case 2:
-                    GoRouter.of(context).push('/workout');
-                    break;
-                }
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
 
 class MobDev extends StatelessWidget {
   const MobDev({super.key, required this.title});
