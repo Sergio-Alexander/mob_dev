@@ -5,6 +5,8 @@ class RecordingState with ChangeNotifier {
   String? _lastRecordingType;
   int _recordingPoints = 0;
 
+  int get points => _recordingPoints;
+
   DateTime? get lastRecordingTime => _lastRecordingTime;
   String? get lastRecordingType => _lastRecordingType;
   int get recordingPoints => _recordingPoints;

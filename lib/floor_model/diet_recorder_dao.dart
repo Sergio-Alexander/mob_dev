@@ -3,10 +3,10 @@ import 'diet_recorder_entity.dart';
 
 @dao
 abstract class DietRecorderDao {
-  @Query('SELECT * FROM diet_recorder')
+  @Query('SELECT * FROM DietRecorder')
   Future<List<DietRecorderEntity>> findAllDietRecorders();
 
-  @Query('SELECT * FROM diet_recorder WHERE id = :id')
+  @Query('SELECT * FROM DietRecorder WHERE id = :id')
   Stream<DietRecorderEntity?> findDietRecorderById(int id);
 
   @insert

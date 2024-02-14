@@ -5,13 +5,17 @@ import 'diet_recorder_dao.dart';
 import 'emotion_recorder_entity.dart';
 import 'workout_recorder_entity.dart';
 import 'diet_recorder_entity.dart';
+import 'app_status_entity.dart';
+import 'app_status_dao.dart';
 
 class RecorderRepository {
   final EmotionRecorderDao emotionRecorderDao;
   final WorkoutRecorderDao workoutRecorderDao;
   final DietRecorderDao dietRecorderDao;
+  final AppStatusDao appStatusDao;
 
-  RecorderRepository(this.emotionRecorderDao, this.workoutRecorderDao, this.dietRecorderDao);
+  RecorderRepository(this.emotionRecorderDao, this.workoutRecorderDao,
+      this.dietRecorderDao, this.appStatusDao);
 
   // EmotionRecorder methods
   Future<List<EmotionRecorderEntity>> getAllEmotionRecordings() async {
@@ -75,5 +79,27 @@ class RecorderRepository {
   Future<void> deleteDietRecording(DietRecorderEntity recorder) async {
     await dietRecorderDao.deleteDietRecorder(recorder);
   }
+
+  // AppStatus methods
+  Future<List<AppStatusEntity>> getAllAppStatuses() async {
+    return await appStatusDao.findAllAppStatuses();
+  }
+
+  Stream<AppStatusEntity?> getAppStatusById(int id) {
+    return appStatusDao.findAppStatusById(id);
+  }
+
+  Future<int> insertAppStatus(AppStatusEntity status) async {
+    return await appStatusDao.insertAppStatus(status);
+  }
+
+  Future<void> updateAppStatus(AppStatusEntity status) async {
+    await appStatusDao.updateAppStatus(status);
+  }
+
+  Future<void> deleteAppStatus(AppStatusEntity status) async {
+    await appStatusDao.deleteAppStatus(status);
+  }
+
 }
 

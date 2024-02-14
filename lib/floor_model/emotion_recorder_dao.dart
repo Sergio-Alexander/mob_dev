@@ -3,13 +3,13 @@ import 'emotion_recorder_entity.dart';
 
 @dao
 abstract class EmotionRecorderDao {
-  @Query('SELECT * FROM emotion_recorder')
+  @Query('SELECT * FROM EmotionRecorder')
   Future<List<EmotionRecorderEntity>> findAllEmotionRecorders();
 
   // @Query('SELECT * FROM emotion_recorder WHERE id = :id')
   // Stream<EmotionRecorderEntity> findEmotionRecorderById(int id);
 
-  @Query('SELECT * FROM emotion_recorder WHERE id = :id')
+  @Query('SELECT * FROM EmotionRecorder WHERE id = :id')
   Stream<EmotionRecorderEntity?> findEmotionRecorderById(int id);
 
   @insert
