@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'emotion_recorder.dart';
 import 'diet_recorder.dart';
+import 'floor_model/recorder_database/recorder_database.dart';
 import 'workout_recorder.dart';
 
 import 'package:provider/provider.dart';
@@ -30,7 +31,12 @@ final GoRouter _router = GoRouter(
     ShellRoute(
       builder: (BuildContext context, GoRouterState state, Widget child) {
         return Scaffold(
-          appBar: AppBar(title: Text('My App')),
+
+          appBar: AppBar(
+            title: Text('CPSC-MobDev: Sergio'),
+            centerTitle: true,
+          ),
+
           body: Column(
             children: [
               Expanded(child: child), // Main content of the routed pages
@@ -60,10 +66,19 @@ final GoRouter _router = GoRouter(
         );
       },
       routes: [
+        // GoRoute(
+        //   path: '/emotion',
+        //   builder: (BuildContext context, GoRouterState state) => EmotionRecorder(),
+        // ),
+
         GoRoute(
           path: '/emotion',
-          builder: (BuildContext context, GoRouterState state) => EmotionRecorder(),
+          builder: (BuildContext context, GoRouterState state) {
+            final database = Provider.of<RecorderDatabase>(context);
+            return EmotionRecorder(database: database);
+          },
         ),
+
         GoRoute(
           path: '/diet',
           builder: (BuildContext context, GoRouterState state) => DietRecorder(),
@@ -72,6 +87,22 @@ final GoRouter _router = GoRouter(
           path: '/workout',
           builder: (BuildContext context, GoRouterState state) => WorkoutRecorder(),
         ),
+
+
+
+        // GoRoute(
+        //   path: '/diet',
+        //   builder: (BuildContext context, GoRouterState state) {
+        //     final database = Provider.of<RecorderDatabase>(context);
+        //     return DietRecorder(database: database);
+        //   },
+        // ),
+        // GoRoute(
+        //   path: '/workout',
+        //   builder: (BuildContext context, GoRouterState state) => WorkoutRecorder(),
+        // ),
+
+
       ],
     ),
   ],

@@ -1,10 +1,15 @@
 import 'package:floor/floor.dart';
+import '../date_time_converter.dart';
 
 @Entity(tableName: "WorkoutRecorder")
 class WorkoutRecorderEntity {
-  @primaryKey
+  @PrimaryKey(autoGenerate: true)
   final int id;
   final String workout;
+  final int repetitions;
 
-  WorkoutRecorderEntity(this.id, this.workout);
+  @TypeConverters([DateTimeConverter])
+  final DateTime timestamp;
+
+  WorkoutRecorderEntity(this.id, this.workout, this.repetitions, this.timestamp);
 }

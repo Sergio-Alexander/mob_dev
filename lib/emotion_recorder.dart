@@ -7,8 +7,15 @@ import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dar
 
 
 
+
+
 class EmotionRecorder extends StatefulWidget {
-  const EmotionRecorder({super.key});
+
+  // const EmotionRecorder({super.key});
+
+  final RecorderDatabase? database;
+  const EmotionRecorder({Key? key, this.database}):super(key:key);
+
 
   @override
   _EmotionRecorder createState() => _EmotionRecorder();
@@ -18,7 +25,7 @@ class _EmotionRecorder extends State<EmotionRecorder> {
   List<EmotionRecorderEntity> emojiData = [];
   String selectedEmoji = '😀';
   ScrollController _scrollController = ScrollController();
-  RecorderDatabase? database;
+  // RecorderDatabase? database;
 
   final List<String> emojiList = [
     '😀', '😃', '😄', '😁', '😆', '🥹', '😅', '😂', '🤣', '🥲', '☺️',
@@ -26,23 +33,16 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     '😋', '😛', '😝',
   ];
 
+
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    $FloorRecorderDatabase
-        .databaseBuilder('recorder_database.db')
-        .build()
-        .then((db) {
-      setState(() {
-        database = db;
-      });
-      _loadEmotions();
-    });
+    _loadEmotions();
   }
 
   Future<void> _loadEmotions() async {
-    if(database != null){
-      final emotions = await database!.emotionRecorderDao.findAllEmotionRecorders();
+    if(widget.database != null){
+      final emotions = await widget.database!.emotionRecorderDao.findAllEmotionRecorders();
       setState(() {
         emojiData = emotions;
         });
@@ -52,14 +52,14 @@ class _EmotionRecorder extends State<EmotionRecorder> {
   Future<void> _recordEmotion() async {
     EmotionRecorderEntity? emotion;
 
-    if(database != null){
+    if(widget.database != null){
       final points = Provider.of<RecordingState>(context, listen: false).points;
       emotion = EmotionRecorderEntity(null, selectedEmoji, points, DateTime.now());
     };
 
     if (emotion != null){
       try{
-        await database!.emotionRecorderDao.insertEmotionRecorder(emotion);
+        await widget.database!.emotionRecorderDao.insertEmotionRecorder(emotion);
         await _loadEmotions();
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       } catch (e) {
@@ -71,9 +71,9 @@ class _EmotionRecorder extends State<EmotionRecorder> {
 
 
   Future<void> _deleteEmotion(EmotionRecorderEntity emotion) async {
-    if(database != null){
+    if(widget.database != null){
       try{
-        await database!.emotionRecorderDao.deleteEmotionRecorder(emotion);
+        await widget.database!.emotionRecorderDao.deleteEmotionRecorder(emotion);
         _loadEmotions();
       } catch (e){
         print('Error: $e');

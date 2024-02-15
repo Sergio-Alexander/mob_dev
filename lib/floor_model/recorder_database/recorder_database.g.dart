@@ -63,6 +63,8 @@ class _$RecorderDatabase extends RecorderDatabase {
 
   EmotionRecorderDao? _emotionRecorderDaoInstance;
 
+  WorkoutRecorderDao? _workoutRecorderDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -86,6 +88,8 @@ class _$RecorderDatabase extends RecorderDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `EmotionRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `emoji` TEXT NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `WorkoutRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workout` TEXT NOT NULL, `repetitions` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -97,6 +101,12 @@ class _$RecorderDatabase extends RecorderDatabase {
   EmotionRecorderDao get emotionRecorderDao {
     return _emotionRecorderDaoInstance ??=
         _$EmotionRecorderDao(database, changeListener);
+  }
+
+  @override
+  WorkoutRecorderDao get workoutRecorderDao {
+    return _workoutRecorderDaoInstance ??=
+        _$WorkoutRecorderDao(database, changeListener);
   }
 }
 
@@ -192,6 +202,101 @@ class _$EmotionRecorderDao extends EmotionRecorderDao {
   @override
   Future<void> deleteEmotionRecorder(EmotionRecorderEntity recorder) async {
     await _emotionRecorderEntityDeletionAdapter.delete(recorder);
+  }
+}
+
+class _$WorkoutRecorderDao extends WorkoutRecorderDao {
+  _$WorkoutRecorderDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database, changeListener),
+        _workoutRecorderEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'WorkoutRecorder',
+            (WorkoutRecorderEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'workout': item.workout,
+                  'repetitions': item.repetitions,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp)
+                },
+            changeListener),
+        _workoutRecorderEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'WorkoutRecorder',
+            ['id'],
+            (WorkoutRecorderEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'workout': item.workout,
+                  'repetitions': item.repetitions,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp)
+                },
+            changeListener),
+        _workoutRecorderEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'WorkoutRecorder',
+            ['id'],
+            (WorkoutRecorderEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'workout': item.workout,
+                  'repetitions': item.repetitions,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp)
+                },
+            changeListener);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<WorkoutRecorderEntity>
+      _workoutRecorderEntityInsertionAdapter;
+
+  final UpdateAdapter<WorkoutRecorderEntity>
+      _workoutRecorderEntityUpdateAdapter;
+
+  final DeletionAdapter<WorkoutRecorderEntity>
+      _workoutRecorderEntityDeletionAdapter;
+
+  @override
+  Future<List<WorkoutRecorderEntity>> findAllWorkoutRecorders() async {
+    return _queryAdapter.queryList('SELECT * FROM workout_recorder',
+        mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
+            row['id'] as int,
+            row['workout'] as String,
+            row['repetitions'] as int,
+            _dateTimeConverter.decode(row['timestamp'] as int)));
+  }
+
+  @override
+  Stream<WorkoutRecorderEntity?> findWorkoutRecorderById(int id) {
+    return _queryAdapter.queryStream(
+        'SELECT * FROM workout_recorder WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
+            row['id'] as int,
+            row['workout'] as String,
+            row['repetitions'] as int,
+            _dateTimeConverter.decode(row['timestamp'] as int)),
+        arguments: [id],
+        queryableName: 'workout_recorder',
+        isView: false);
+  }
+
+  @override
+  Future<int> insertWorkoutRecorder(WorkoutRecorderEntity recorder) {
+    return _workoutRecorderEntityInsertionAdapter.insertAndReturnId(
+        recorder, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateWorkoutRecorder(WorkoutRecorderEntity recorder) async {
+    await _workoutRecorderEntityUpdateAdapter.update(
+        recorder, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteWorkoutRecorder(WorkoutRecorderEntity recorder) async {
+    await _workoutRecorderEntityDeletionAdapter.delete(recorder);
   }
 }
 

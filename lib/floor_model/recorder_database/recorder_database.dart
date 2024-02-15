@@ -19,12 +19,12 @@ import '../app_status/app_status_dao.dart';
 
 part 'recorder_database.g.dart';
 
-// typeConverters: [DateTimeConverter]
+
 
 @Database(version: 1, entities:
 [
   EmotionRecorderEntity,
-  // WorkoutRecorderEntity,
+  WorkoutRecorderEntity,
   // DietRecorderEntity,
   // AppStatusEntity
 ],
@@ -34,8 +34,8 @@ part 'recorder_database.g.dart';
 abstract class RecorderDatabase extends FloorDatabase {
   EmotionRecorderDao get emotionRecorderDao;
 
-  get generalDao => null;
-  // WorkoutRecorderDao get workoutRecorderDao;
+  // get generalDao => null;
+  WorkoutRecorderDao get workoutRecorderDao;
   // DietRecorderDao get dietRecorderDao;
   // AppStatusDao get appStatusDao;
 }

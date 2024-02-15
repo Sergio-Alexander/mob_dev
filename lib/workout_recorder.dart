@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mob_dev/app_status.dart';
 
+import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
+import 'package:mob_dev/floor_model/workout_recorder/workout_recorder_entity.dart';
+
+
 class WorkoutRecorder extends StatefulWidget {
   const WorkoutRecorder({super.key});
 
