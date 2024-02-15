@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mob_dev/app_status.dart';
 
-import 'package:mob_dev/floor_model/recorder_database.dart';
-import 'package:mob_dev/floor_model/emotion_recorder_entity.dart';
+import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
+import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dart';
+
 
 
 class EmotionRecorder extends StatefulWidget {
@@ -13,30 +14,10 @@ class EmotionRecorder extends StatefulWidget {
   _EmotionRecorder createState() => _EmotionRecorder();
 }
 
-// class _EmotionRecorder extends State<EmotionRecorder> {
-//   List<Map<String, dynamic>> emojiData = [];
-//   String selectedEmoji = '😀';
-//
-//   final List<String> emojiList = [
-//     '😀', '😃', '😄', '😁', '😆', '🥹', '😅', '😂', '🤣', '🥲', '☺️',
-//     '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😚',
-//     '😋', '😛', '😝',
-//   ];
-//
-//   void _recordEmotion() {
-//     setState(() {
-//       emojiData.insert(0, {'emoji': selectedEmoji, 'datetime': DateTime.now()});
-//     });
-//
-//     Provider.of<RecordingState>(context, listen: false).record('Emotion');
-//   }
-
-
-
 class _EmotionRecorder extends State<EmotionRecorder> {
   List<EmotionRecorderEntity> emojiData = [];
   String selectedEmoji = '😀';
-
+  ScrollController _scrollController = ScrollController();
   RecorderDatabase? database;
 
   final List<String> emojiList = [
@@ -46,12 +27,17 @@ class _EmotionRecorder extends State<EmotionRecorder> {
   ];
 
   @override
-  void initState(){
+  void initState() {
+    super.initState();
     $FloorRecorderDatabase
         .databaseBuilder('recorder_database.db')
         .build()
-        .then((db) => setState(() => database = db));
-    _loadEmotions();
+        .then((db) {
+      setState(() {
+        database = db;
+      });
+      _loadEmotions();
+    });
   }
 
   Future<void> _loadEmotions() async {
@@ -60,7 +46,6 @@ class _EmotionRecorder extends State<EmotionRecorder> {
       setState(() {
         emojiData = emotions;
         });
-
     }
   }
 
@@ -75,16 +60,12 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     if (emotion != null){
       try{
         await database!.emotionRecorderDao.insertEmotionRecorder(emotion);
-        _loadEmotions();
+        await _loadEmotions();
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       } catch (e) {
         print('Error: $e');
       }
     }
-
-      // setState(() {
-      //   emojiData.insert(0, {'emoji': selectedEmoji, 'datetime': DateTime.now()});
-      // });
-
     Provider.of<RecordingState>(context, listen: false).record('Emotion');
   }
 
@@ -107,7 +88,7 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     });
   }
 
-
+//
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +96,7 @@ class _EmotionRecorder extends State<EmotionRecorder> {
         title: const Text('Emotion Recorder'),
         centerTitle: true,
       ),
+
         body: Column(
           children: [
             const Text('Emoji Picker'),
@@ -152,36 +134,20 @@ class _EmotionRecorder extends State<EmotionRecorder> {
               onPressed: _clearEmojis,
               child: const Text('Clear Logs'),
             ),
-
-            // IconButton(
-            //   icon: const Icon(Icons.delete),
-            //   onPressed: () => _deleteEmotion(emojiData),
-            // );
             const Divider(),
             const Text('Logs'),
             Expanded(
               child: ListView.builder(
+                controller: _scrollController,
                 itemCount: emojiData.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    // leading: Text(
-                    //   emojiData[index]['emoji'],
-                    //   style: const TextStyle(fontSize: 24),
-                    // ),
-                    // title: Text(
-                    //   'Used On: ${emojiData[index]['datetime'].toString()}',
-                    // ),
-
-
                     leading: Text(
                       emojiData[index].emoji,
                       style: const TextStyle(fontSize: 24),
                     ),
                     title: Text(
                       'Used On: ${emojiData[index].timestamp.toString()}',
-                    ),
-                    subtitle: Text(
-                      'Points: ${emojiData[index].points.toString()}',
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
@@ -196,3 +162,4 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     );
   }
 }
+//

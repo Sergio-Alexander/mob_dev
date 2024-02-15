@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'floor_model/recorder_database/recorder_database.dart';
+
 class RecordingState with ChangeNotifier {
   DateTime? _lastRecordingTime;
   String? _lastRecordingType;
@@ -24,6 +26,19 @@ class RecordingState with ChangeNotifier {
     _recordingPoints += calculatePoints();
     notifyListeners();
   }
+
+  // Future<void> loadLastRecordedData() async {
+  //   // Assuming a generalized method in your DAO that fetches the latest record across all types
+  //   final database = await $FloorRecorderDatabase.databaseBuilder('recorder_database.db').build();
+  //   final lastRecord = await database.generalDao.findLastRecord();
+  //   if (lastRecord != null) {
+  //     // Update your state based on the type of the last record
+  //     // This requires your database model to differentiate between record types
+  //     _lastRecordingType = lastRecord.type; // 'Emotion', 'Diet', 'Workout'
+  //     _lastRecordingTime = lastRecord.timestamp;
+  //     notifyListeners();
+  //   }
+  // }
 
 
   int calculatePoints() {

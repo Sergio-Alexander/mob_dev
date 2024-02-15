@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'date_time_converter.dart';
+import '../date_time_converter.dart';
 
 @Entity(tableName: "EmotionRecorder")
 class EmotionRecorderEntity {
