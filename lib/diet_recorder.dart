@@ -6,13 +6,9 @@ import 'package:mob_dev/app_status.dart';
 import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/diet_recorder/diet_recorder_entity.dart';
 
-import 'package:mob_dev/floor_model/app_status/app_status_entity.dart';
-
 
 
 class DietRecorder extends StatefulWidget {
-  // const DietRecorder({Key? key}) : super(key: key);
-
   final RecorderDatabase? database;
   const DietRecorder({Key? key, this.database}):super(key:key);
 
@@ -48,35 +44,28 @@ class _DietRecorderState extends State<DietRecorder> {
 
   Future<void> _recordDiet() async {
     DietRecorderEntity? diet;
-
-    // AppStatusEntity? appStatus;
-    //
-    // const String whatRecorder = 'Workout';
-
-
     final String food = _foodController.text;
     final String amount = _amountController.text;
 
     if(widget.database != null){
       final points = Provider.of<RecordingState>(context, listen: false).points;
       diet = DietRecorderEntity(null, food, int.parse(amount), points, DateTime.now());
-
-      // appStatus = AppStatusEntity(null, whatRecorder, DateTime.now());
-    };
+    }
 
     if (diet != null){
       try{
         await widget.database!.dietRecorderDao.insertDietRecorder(diet);
 
-        // if (appStatus != null){
-        //   await widget.database!.appStatusDao.insertAppStatus(appStatus);
-        // }
-
-
         await _loadDiet();
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+
+        if (_scrollController.hasClients) {
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        }
+
         _foodController.clear();
         _amountController.clear();
+
+        FocusScope.of(context).unfocus();
       } catch (e) {
         print('Error: $e');
       }
@@ -88,15 +77,9 @@ class _DietRecorderState extends State<DietRecorder> {
     if(widget.database != null){
       try{
         await widget.database!.dietRecorderDao.deleteDietRecorder(diet);
-
-        // Fetch the current status
-        // AppStatusEntity currentStatus = await widget.database!.appStatusDao.getLastStatus();
-        //
-        // if (currentStatus.whichRecorder == 'Diet' && currentStatus.timestamp == diet.timestamp) {
-        //   await widget.database!.appStatusDao.deleteAppStatus(currentStatus);
-        // }
-
-        _loadDiet();
+        Provider.of<RecordingState>(context, listen: false).decreasePoints();
+        await Provider.of<RecordingState>(context, listen: false).loadLastStatus();
+        await _loadDiet();
       } catch (e){
         print('Error: $e');
       }
@@ -168,13 +151,13 @@ class _DietRecorderState extends State<DietRecorder> {
               onPressed: _recordDiet,
               child: const Text('Log Food'),
             ),
-            ElevatedButton(
-              onPressed: () => setState(() {
-                dietData.clear();
-                selectedFood = null;
-              }),
-              child: const Text('Clear Logs'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () => setState(() {
+            //     dietData.clear();
+            //     selectedFood = null;
+            //   }),
+            //   child: const Text('Clear Logs'),
+            // ),
             const Divider(),
             const Text('Food Logs'),
             SizedBox(
@@ -238,67 +221,8 @@ class _DietRecorderState extends State<DietRecorder> {
                           },
                         ),
                       ]
-
                     )
                   );
-
-                  // ListTile(
-                  //   title: Text(dietData[index].diet),
-                  //   subtitle: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Text('Amount: ${dietData[index].amount}'),
-                  //       Text('Date and Time: ${dietData[index].timestamp.toString()}'),
-                  //     ],
-                  //   ),
-                  //   trailing: Row(
-                  //     mainAxisSize: MainAxisSize.min,
-                  //     children: [
-                  //       IconButton(
-                  //         icon: const Icon(Icons.edit),
-                  //         onPressed: () async {
-                  //           final newAmount = await showDialog<int>(
-                  //             context: context,
-                  //             builder: (context) {
-                  //               final controller = TextEditingController();
-                  //               return AlertDialog(
-                  //                 title: const Text('Enter new amount'),
-                  //                 content: TextField(
-                  //                   controller: controller,
-                  //                   keyboardType: TextInputType.number,
-                  //                   decoration: const InputDecoration(
-                  //                     hintText: 'Enter Amount',
-                  //                   ),
-                  //                 ),
-                  //                 actions: [
-                  //                   TextButton(
-                  //                     child: const Text('Cancel'),
-                  //                     onPressed: () {
-                  //                       Navigator.of(context).pop();
-                  //                     },
-                  //                   ),
-                  //                   TextButton(
-                  //                     child: const Text('OK'),
-                  //                     onPressed: () {
-                  //                       Navigator.of(context).pop(int.parse(controller.text));
-                  //                     },
-                  //                   ),
-                  //                 ],
-                  //               );
-                  //             },
-                  //           );
-                  //           if (newAmount != null) {
-                  //             _updateDiet(dietData[index], newAmount);
-                  //           }
-                  //         },
-                  //       ),
-                  //       IconButton(
-                  //         icon: const Icon(Icons.delete),
-                  //         onPressed: () => _deleteDiet(dietData[index]),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // );
                 },
               ),
             ),

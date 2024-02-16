@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 
 import 'floor_model/recorder_database/recorder_database.dart';
 
-import 'package:mob_dev/floor_model/app_status/app_status_entity.dart';
-
 import 'package:mob_dev/floor_model/workout_recorder/workout_recorder_entity.dart';
 import 'package:mob_dev/floor_model/diet_recorder/diet_recorder_entity.dart';
 import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dart';
@@ -43,6 +41,13 @@ class RecordingState with ChangeNotifier {
     _lastRecordingType = type;
     _recordingPoints += calculatePoints();
     notifyListeners();
+  }
+
+  void decreasePoints() {
+    if (_recordingPoints > 0) {
+      _recordingPoints--;
+      notifyListeners();
+    }
   }
 
 
@@ -90,7 +95,10 @@ class RecordingState with ChangeNotifier {
       DateTime? mostRecentTimestamp;
       String? mostRecentType;
 
-      if (lastWorkout != null) {
+      if (lastWorkout == null && lastDiet == null && lastEmotion == null) {
+        _lastRecordingType = "none";
+        _lastRecordingTime = null;
+      } else if (lastWorkout != null) {
         mostRecentTimestamp = lastWorkout.timestamp;
         mostRecentType = 'Workout';
       } else if (lastDiet != null) {
@@ -130,6 +138,8 @@ class RecordingState with ChangeNotifier {
     } catch (e) {
       print('Error: $e');
     }
+
+    notifyListeners();
   }
 }
 
