@@ -25,17 +25,15 @@ part 'recorder_database.g.dart';
 [
   EmotionRecorderEntity,
   WorkoutRecorderEntity,
-  // DietRecorderEntity,
+  DietRecorderEntity,
   // AppStatusEntity
 ],
-    // typeConverters: [DateTimeConverter]
+  // typeConverters: [DateTimeConverter]
 )
 
 abstract class RecorderDatabase extends FloorDatabase {
   EmotionRecorderDao get emotionRecorderDao;
-
-  // get generalDao => null;
   WorkoutRecorderDao get workoutRecorderDao;
-  // DietRecorderDao get dietRecorderDao;
+  DietRecorderDao get dietRecorderDao;
   // AppStatusDao get appStatusDao;
 }

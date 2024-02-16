@@ -81,11 +81,17 @@ final GoRouter _router = GoRouter(
 
         GoRoute(
           path: '/diet',
-          builder: (BuildContext context, GoRouterState state) => DietRecorder(),
+          builder: (BuildContext context, GoRouterState state) {
+            final database = Provider.of<RecorderDatabase>(context);
+            return DietRecorder(database: database);
+          }
         ),
         GoRoute(
           path: '/workout',
-          builder: (BuildContext context, GoRouterState state) => WorkoutRecorder(),
+          builder: (BuildContext context, GoRouterState state) {
+            final database = Provider.of<RecorderDatabase>(context);
+            return WorkoutRecorder(database: database);
+          }
         ),
 
 

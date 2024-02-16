@@ -20,4 +20,14 @@ abstract class EmotionRecorderDao {
 
   @delete
   Future<void> deleteEmotionRecorder(EmotionRecorderEntity recorder);
+
+
+
+  @Query('SELECT * FROM EmotionRecorder ORDER BY id DESC LIMIT 1')
+  Future<EmotionRecorderEntity?> getLastEmotion();
+
+
+
+  @Query('SELECT COUNT(*) FROM EmotionRecorder')
+  Future<int?> countEmotions();
 }

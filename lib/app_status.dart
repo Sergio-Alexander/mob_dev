@@ -2,22 +2,40 @@ import 'package:flutter/foundation.dart';
 
 import 'floor_model/recorder_database/recorder_database.dart';
 
+import 'package:mob_dev/floor_model/app_status/app_status_entity.dart';
+
+import 'package:mob_dev/floor_model/workout_recorder/workout_recorder_entity.dart';
+import 'package:mob_dev/floor_model/diet_recorder/diet_recorder_entity.dart';
+import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dart';
+
+
 class RecordingState with ChangeNotifier {
   DateTime? _lastRecordingTime;
   String? _lastRecordingType;
   int _recordingPoints = 0;
 
+  final RecorderDatabase database;
+
+  RecordingState({required this.database}) {
+    loadLastStatus();
+  }
+
+
   int get points => _recordingPoints;
 
   DateTime? get lastRecordingTime => _lastRecordingTime;
+
   String? get lastRecordingType => _lastRecordingType;
+
   int get recordingPoints => _recordingPoints;
 
   void record(String type) {
     final now = DateTime.now();
 
     // if more than 12 hours have passed since the last recording
-    if (_lastRecordingTime != null && now.difference(_lastRecordingTime!).inHours >= 12) {
+    if (_lastRecordingTime != null && now
+        .difference(_lastRecordingTime!)
+        .inHours >= 12) {
       _recordingPoints = 0; // reset points if more than 12 hours have passed
     }
 
@@ -27,26 +45,12 @@ class RecordingState with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> loadLastRecordedData() async {
-  //   // Assuming a generalized method in your DAO that fetches the latest record across all types
-  //   final database = await $FloorRecorderDatabase.databaseBuilder('recorder_database.db').build();
-  //   final lastRecord = await database.generalDao.findLastRecord();
-  //   if (lastRecord != null) {
-  //     // Update your state based on the type of the last record
-  //     // This requires your database model to differentiate between record types
-  //     _lastRecordingType = lastRecord.type; // 'Emotion', 'Diet', 'Workout'
-  //     _lastRecordingTime = lastRecord.timestamp;
-  //     notifyListeners();
-  //   }
-  // }
-
 
   int calculatePoints() {
     return 1;
   }
 
   String calculateDL() {
-
     if (recordingPoints < 10) {
       return 'Level 1';
     } else if (recordingPoints < 20) {
@@ -71,4 +75,62 @@ class RecordingState with ChangeNotifier {
 
     return 'Level X'; // default
   }
+
+  Future<void> loadLastStatus() async {
+    try {
+      // Fetch the last record from each table
+      WorkoutRecorderEntity? lastWorkout = await database.workoutRecorderDao
+          .getLastWorkout();
+      DietRecorderEntity? lastDiet = await database.dietRecorderDao
+          .getLastDiet();
+      EmotionRecorderEntity? lastEmotion = await database.emotionRecorderDao
+          .getLastEmotion();
+
+      // Initialize the most recent record to the first non-null record
+      DateTime? mostRecentTimestamp;
+      String? mostRecentType;
+
+      if (lastWorkout != null) {
+        mostRecentTimestamp = lastWorkout.timestamp;
+        mostRecentType = 'Workout';
+      } else if (lastDiet != null) {
+        mostRecentTimestamp = lastDiet.timestamp;
+        mostRecentType = 'Diet';
+      } else if (lastEmotion != null) {
+        mostRecentTimestamp = lastEmotion.timestamp;
+        mostRecentType = 'Emotion';
+      }
+
+      // Compare the timestamps of the non-null records to find the most recent record
+      if (lastWorkout != null && mostRecentTimestamp != null &&
+          lastWorkout.timestamp.isAfter(mostRecentTimestamp)) {
+        mostRecentTimestamp = lastWorkout.timestamp;
+        mostRecentType = 'Workout';
+      }
+      if (lastDiet != null && mostRecentTimestamp != null &&
+          lastDiet.timestamp.isAfter(mostRecentTimestamp)) {
+        mostRecentTimestamp = lastDiet.timestamp;
+        mostRecentType = 'Diet';
+      }
+      if (lastEmotion != null && mostRecentTimestamp != null &&
+          lastEmotion.timestamp.isAfter(mostRecentTimestamp)) {
+        mostRecentTimestamp = lastEmotion.timestamp;
+        mostRecentType = 'Emotion';
+      }
+
+
+      int? workoutPoints = await database.workoutRecorderDao.countWorkouts();
+      int? dietPoints = await database.dietRecorderDao.countDiets();
+      int? emotionPoints = await database.emotionRecorderDao.countEmotions();
+
+      _lastRecordingTime = mostRecentTimestamp;
+      _lastRecordingType = mostRecentType;
+      _recordingPoints =
+          (workoutPoints ?? 0) + (dietPoints ?? 0) + (emotionPoints ?? 0);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 }
+
+

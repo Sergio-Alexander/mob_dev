@@ -6,7 +6,7 @@ import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dart';
 
 
-
+import 'package:mob_dev/floor_model/app_status/app_status_entity.dart';
 
 
 class EmotionRecorder extends StatefulWidget {
@@ -15,7 +15,6 @@ class EmotionRecorder extends StatefulWidget {
 
   final RecorderDatabase? database;
   const EmotionRecorder({Key? key, this.database}):super(key:key);
-
 
   @override
   _EmotionRecorder createState() => _EmotionRecorder();
@@ -52,6 +51,11 @@ class _EmotionRecorder extends State<EmotionRecorder> {
   Future<void> _recordEmotion() async {
     EmotionRecorderEntity? emotion;
 
+
+    // AppStatusEntity? appStatus;
+    //
+    // const String whatRecorder = 'Emotion';
+
     if(widget.database != null){
       final points = Provider.of<RecordingState>(context, listen: false).points;
       emotion = EmotionRecorderEntity(null, selectedEmoji, points, DateTime.now());
@@ -60,6 +64,11 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     if (emotion != null){
       try{
         await widget.database!.emotionRecorderDao.insertEmotionRecorder(emotion);
+
+        // if (appStatus != null){
+        //   await widget.database!.appStatusDao.insertAppStatus(appStatus);
+        // }
+
         await _loadEmotions();
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       } catch (e) {
@@ -74,6 +83,14 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     if(widget.database != null){
       try{
         await widget.database!.emotionRecorderDao.deleteEmotionRecorder(emotion);
+
+        // Fetch the current status
+        // AppStatusEntity currentStatus = await widget.database!.appStatusDao.getLastStatus();
+        //
+        // if (currentStatus.whichRecorder == 'Emotion' && currentStatus.timestamp == emotion.timestamp) {
+        //   await widget.database!.appStatusDao.deleteAppStatus(currentStatus);
+        // }
+
         _loadEmotions();
       } catch (e){
         print('Error: $e');

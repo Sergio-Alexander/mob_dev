@@ -65,6 +65,8 @@ class _$RecorderDatabase extends RecorderDatabase {
 
   WorkoutRecorderDao? _workoutRecorderDaoInstance;
 
+  DietRecorderDao? _dietRecorderDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -89,7 +91,9 @@ class _$RecorderDatabase extends RecorderDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `EmotionRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `emoji` TEXT NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `WorkoutRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workout` TEXT NOT NULL, `repetitions` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `WorkoutRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `workout` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `DietRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `diet` TEXT NOT NULL, `amount` INTEGER NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -107,6 +111,12 @@ class _$RecorderDatabase extends RecorderDatabase {
   WorkoutRecorderDao get workoutRecorderDao {
     return _workoutRecorderDaoInstance ??=
         _$WorkoutRecorderDao(database, changeListener);
+  }
+
+  @override
+  DietRecorderDao get dietRecorderDao {
+    return _dietRecorderDaoInstance ??=
+        _$DietRecorderDao(database, changeListener);
   }
 }
 
@@ -188,6 +198,23 @@ class _$EmotionRecorderDao extends EmotionRecorderDao {
   }
 
   @override
+  Future<EmotionRecorderEntity?> getLastEmotion() async {
+    return _queryAdapter.query(
+        'SELECT * FROM EmotionRecorder ORDER BY id DESC LIMIT 1',
+        mapper: (Map<String, Object?> row) => EmotionRecorderEntity(
+            row['id'] as int?,
+            row['emoji'] as String,
+            row['points'] as int,
+            _dateTimeConverter.decode(row['timestamp'] as int)));
+  }
+
+  @override
+  Future<int?> countEmotions() async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM EmotionRecorder',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
+
+  @override
   Future<int> insertEmotionRecorder(EmotionRecorderEntity recorder) {
     return _emotionRecorderEntityInsertionAdapter.insertAndReturnId(
         recorder, OnConflictStrategy.abort);
@@ -216,7 +243,8 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
             (WorkoutRecorderEntity item) => <String, Object?>{
                   'id': item.id,
                   'workout': item.workout,
-                  'repetitions': item.repetitions,
+                  'quantity': item.quantity,
+                  'points': item.points,
                   'timestamp': _dateTimeConverter.encode(item.timestamp)
                 },
             changeListener),
@@ -227,7 +255,8 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
             (WorkoutRecorderEntity item) => <String, Object?>{
                   'id': item.id,
                   'workout': item.workout,
-                  'repetitions': item.repetitions,
+                  'quantity': item.quantity,
+                  'points': item.points,
                   'timestamp': _dateTimeConverter.encode(item.timestamp)
                 },
             changeListener),
@@ -238,7 +267,8 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
             (WorkoutRecorderEntity item) => <String, Object?>{
                   'id': item.id,
                   'workout': item.workout,
-                  'repetitions': item.repetitions,
+                  'quantity': item.quantity,
+                  'points': item.points,
                   'timestamp': _dateTimeConverter.encode(item.timestamp)
                 },
             changeListener);
@@ -260,26 +290,46 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
 
   @override
   Future<List<WorkoutRecorderEntity>> findAllWorkoutRecorders() async {
-    return _queryAdapter.queryList('SELECT * FROM workout_recorder',
+    return _queryAdapter.queryList('SELECT * FROM WorkoutRecorder',
         mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
-            row['id'] as int,
+            row['id'] as int?,
             row['workout'] as String,
-            row['repetitions'] as int,
+            row['quantity'] as int,
+            row['points'] as int,
             _dateTimeConverter.decode(row['timestamp'] as int)));
   }
 
   @override
   Stream<WorkoutRecorderEntity?> findWorkoutRecorderById(int id) {
     return _queryAdapter.queryStream(
-        'SELECT * FROM workout_recorder WHERE id = ?1',
+        'SELECT * FROM WorkoutRecorder WHERE id = ?1',
         mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
-            row['id'] as int,
+            row['id'] as int?,
             row['workout'] as String,
-            row['repetitions'] as int,
+            row['quantity'] as int,
+            row['points'] as int,
             _dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [id],
-        queryableName: 'workout_recorder',
+        queryableName: 'WorkoutRecorder',
         isView: false);
+  }
+
+  @override
+  Future<WorkoutRecorderEntity?> getLastWorkout() async {
+    return _queryAdapter.query(
+        'SELECT * FROM WorkoutRecorder ORDER BY id DESC LIMIT 1',
+        mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
+            row['id'] as int?,
+            row['workout'] as String,
+            row['quantity'] as int,
+            row['points'] as int,
+            _dateTimeConverter.decode(row['timestamp'] as int)));
+  }
+
+  @override
+  Future<int?> countWorkouts() async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM WorkoutRecorder',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
   }
 
   @override
@@ -297,6 +347,121 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
   @override
   Future<void> deleteWorkoutRecorder(WorkoutRecorderEntity recorder) async {
     await _workoutRecorderEntityDeletionAdapter.delete(recorder);
+  }
+}
+
+class _$DietRecorderDao extends DietRecorderDao {
+  _$DietRecorderDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database, changeListener),
+        _dietRecorderEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'DietRecorder',
+            (DietRecorderEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'diet': item.diet,
+                  'amount': item.amount,
+                  'points': item.points,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp)
+                },
+            changeListener),
+        _dietRecorderEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'DietRecorder',
+            ['id'],
+            (DietRecorderEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'diet': item.diet,
+                  'amount': item.amount,
+                  'points': item.points,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp)
+                },
+            changeListener),
+        _dietRecorderEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'DietRecorder',
+            ['id'],
+            (DietRecorderEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'diet': item.diet,
+                  'amount': item.amount,
+                  'points': item.points,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp)
+                },
+            changeListener);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<DietRecorderEntity>
+      _dietRecorderEntityInsertionAdapter;
+
+  final UpdateAdapter<DietRecorderEntity> _dietRecorderEntityUpdateAdapter;
+
+  final DeletionAdapter<DietRecorderEntity> _dietRecorderEntityDeletionAdapter;
+
+  @override
+  Future<List<DietRecorderEntity>> findAllDietRecorders() async {
+    return _queryAdapter.queryList('SELECT * FROM DietRecorder',
+        mapper: (Map<String, Object?> row) => DietRecorderEntity(
+            row['id'] as int?,
+            row['diet'] as String,
+            row['amount'] as int,
+            row['points'] as int,
+            _dateTimeConverter.decode(row['timestamp'] as int)));
+  }
+
+  @override
+  Stream<DietRecorderEntity?> findDietRecorderById(int id) {
+    return _queryAdapter.queryStream('SELECT * FROM DietRecorder WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => DietRecorderEntity(
+            row['id'] as int?,
+            row['diet'] as String,
+            row['amount'] as int,
+            row['points'] as int,
+            _dateTimeConverter.decode(row['timestamp'] as int)),
+        arguments: [id],
+        queryableName: 'DietRecorder',
+        isView: false);
+  }
+
+  @override
+  Future<DietRecorderEntity?> getLastDiet() async {
+    return _queryAdapter.query(
+        'SELECT * FROM DietRecorder ORDER BY id DESC LIMIT 1',
+        mapper: (Map<String, Object?> row) => DietRecorderEntity(
+            row['id'] as int?,
+            row['diet'] as String,
+            row['amount'] as int,
+            row['points'] as int,
+            _dateTimeConverter.decode(row['timestamp'] as int)));
+  }
+
+  @override
+  Future<int?> countDiets() async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM DietRecorder',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
+
+  @override
+  Future<int> insertDietRecorder(DietRecorderEntity recorder) {
+    return _dietRecorderEntityInsertionAdapter.insertAndReturnId(
+        recorder, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateDietRecorder(DietRecorderEntity diet) async {
+    await _dietRecorderEntityUpdateAdapter.update(
+        diet, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteDietRecorder(DietRecorderEntity recorder) async {
+    await _dietRecorderEntityDeletionAdapter.delete(recorder);
   }
 }
 

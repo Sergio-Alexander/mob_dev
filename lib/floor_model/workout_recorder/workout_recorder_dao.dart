@@ -3,10 +3,10 @@ import 'workout_recorder_entity.dart';
 
 @dao
 abstract class WorkoutRecorderDao {
-  @Query('SELECT * FROM workout_recorder')
+  @Query('SELECT * FROM WorkoutRecorder')
   Future<List<WorkoutRecorderEntity>> findAllWorkoutRecorders();
 
-  @Query('SELECT * FROM workout_recorder WHERE id = :id')
+  @Query('SELECT * FROM WorkoutRecorder WHERE id = :id')
   Stream<WorkoutRecorderEntity?> findWorkoutRecorderById(int id);
 
   @insert
@@ -15,7 +15,18 @@ abstract class WorkoutRecorderDao {
   @update
   Future<void> updateWorkoutRecorder(WorkoutRecorderEntity recorder);
 
+
+
   @delete
   Future<void> deleteWorkoutRecorder(WorkoutRecorderEntity recorder);
+
+
+
+  @Query('SELECT * FROM WorkoutRecorder ORDER BY id DESC LIMIT 1')
+  Future<WorkoutRecorderEntity?> getLastWorkout();
+
+
+  @Query('SELECT COUNT(*) FROM WorkoutRecorder')
+  Future<int?> countWorkouts();
 }
 
