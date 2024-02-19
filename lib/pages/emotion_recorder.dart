@@ -5,6 +5,7 @@ import 'package:mob_dev/app_status.dart';
 import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dart';
 
+import 'package:mob_dev/app_localization.dart';
 
 class EmotionRecorder extends StatefulWidget {
 
@@ -91,13 +92,13 @@ class _EmotionRecorder extends State<EmotionRecorder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Emotion Recorder'),
+        title: Text(AppLocalizations.of(context).translate('emotionRecorder')),
         centerTitle: true,
       ),
 
         body: Column(
           children: [
-            const Text('Emoji Picker'),
+            Text(AppLocalizations.of(context).translate('emojiPicker')),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

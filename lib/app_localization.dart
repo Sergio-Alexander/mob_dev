@@ -4,9 +4,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
+
 class AppLocalizations {
   final Locale locale;
-  late Map<String, String> _localizedStrings;
+  Map<String, String> _localizedStrings = {}; // Initialize to an empty map
 
   AppLocalizations(this.locale);
 
@@ -15,20 +16,30 @@ class AppLocalizations {
   }
 
   Future<bool> load() async {
-    String jsonString = await rootBundle.loadString('i18n/${locale.languageCode}.json');
-    Map<String, dynamic> jsonMap = json.decode(jsonString);
-
-    _localizedStrings = jsonMap.map((key, value) {
-      return MapEntry(key, value.toString());
-    });
-
-    return true;
+    print("PLS WORKKKK FUCK");
+    try {
+      print("are my json files loading???");
+      String jsonString = await rootBundle.loadString('i18n/${locale.languageCode}.json');
+      Map<String, dynamic> jsonMap = json.decode(jsonString);
+      _localizedStrings = jsonMap.map((key, value) {
+        return MapEntry(key, value.toString());
+      });
+      print("ITS LOADING maybe??");
+      return true;
+    } catch (e, stacktrace) {
+      print('Error loading localization files: $e');
+      print('Stacktrace: $stacktrace');
+      return false;
+    }
   }
+
 
   String translate(String key) {
-    return _localizedStrings[key]!;
+    print("hiiiii");
+    return _localizedStrings[key] ?? key; // Fallback to the key if the translation does not exist
   }
 }
+
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
@@ -40,6 +51,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   Future<AppLocalizations> load(Locale locale) {
+    print("IS THIS LOADING???");
     return SynchronousFuture<AppLocalizations>(AppLocalizations(locale));
   }
 

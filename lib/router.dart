@@ -8,6 +8,9 @@ import 'pages/workout_recorder.dart';
 import 'package:provider/provider.dart';
 import 'app_status.dart';
 
+import 'package:mob_dev/pages/settings.dart';
+import 'app_localization.dart';
+
 class ShellWidget extends StatefulWidget {
   final Widget child;
 
@@ -41,7 +44,8 @@ class _ShellWidgetState extends State<ShellWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CPSC-MobDev: Sergio'),
+        // title: Text('CPSC-MobDev: Sergio'),
+        title: Text(AppLocalizations.of(context).translate('appTitle')),
         centerTitle: true,
       ),
       body: Column(
@@ -68,6 +72,8 @@ class _ShellWidgetState extends State<ShellWidget> {
             case 2:
               context.go('/workout');
               break;
+            case 3:
+              context.go('/settings');
           }
         },
         items: const [
@@ -110,6 +116,12 @@ final GoRouter _router = GoRouter(
             final database = Provider.of<RecorderDatabase>(context);
             return WorkoutRecorder(database: database);
           }
+        ),
+        GoRoute(
+            path: '/settings',
+            builder: (BuildContext context, GoRouterState state) {
+              return SettingsPage();
+            }
         ),
       ],
     ),

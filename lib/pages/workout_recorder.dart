@@ -142,11 +142,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
                 return ListTile(
                   title: Text(workoutData[index].workout),
                   subtitle:
-                  // Text(
-                  //   'Quantity: ${workoutData[index].quantity}',
-                  //   key: Key('quantity_${workoutData[index].quantity}'), // Add a key
-                  // ),
-
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

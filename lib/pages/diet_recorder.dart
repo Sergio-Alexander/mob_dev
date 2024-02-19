@@ -151,13 +151,6 @@ class _DietRecorderState extends State<DietRecorder> {
               onPressed: _recordDiet,
               child: const Text('Log Food'),
             ),
-            // ElevatedButton(
-            //   onPressed: () => setState(() {
-            //     dietData.clear();
-            //     selectedFood = null;
-            //   }),
-            //   child: const Text('Clear Logs'),
-            // ),
             const Divider(),
             const Text('Food Logs'),
             SizedBox(
