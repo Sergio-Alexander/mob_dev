@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'emotion_recorder.dart';
-import 'diet_recorder.dart';
+import 'pages/emotion_recorder.dart';
+import 'pages/diet_recorder.dart';
 import 'floor_model/recorder_database/recorder_database.dart';
-import 'workout_recorder.dart';
+import 'pages/workout_recorder.dart';
 
 import 'package:provider/provider.dart';
 import 'app_status.dart';
@@ -74,6 +74,7 @@ class _ShellWidgetState extends State<ShellWidget> {
           BottomNavigationBarItem(icon: Icon(Icons.sentiment_very_satisfied), label: 'Emotion'),
           BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: 'Diet'),
           BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workout'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );

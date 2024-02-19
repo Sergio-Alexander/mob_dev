@@ -7,32 +7,6 @@ import 'router.dart';
 
 import 'database_init.dart';
 
-// void main() {
-//   runApp(
-//     ChangeNotifierProvider(
-//       create: (context) => RecordingState(),
-//       child: MyApp(),
-//     ),
-//   );
-// }
-
-// void main() {
-//   runApp(
-//     DatabaseInitializer(
-//       child: Builder(
-//         builder: (context) {
-//           return ChangeNotifierProvider(
-//             create: (context) {
-//               final database = Provider.of<RecorderDatabase>(context, listen: false);
-//               return RecordingState(database: database);
-//             },
-//             child: MyApp(),
-//           );
-//         },
-//       ),
-//     ),
-//   );
-// }
 
 void main() {
   runApp(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mob_dev/diet_recorder.dart';
+import 'package:mob_dev/pages/diet_recorder.dart';
 import 'package:mob_dev/app_status.dart';
 import 'package:provider/provider.dart';
 
