@@ -1,14 +1,16 @@
 {
   "error": "Kesalahan",
   "logs": "Log",
-  "UsedOn": "Digunakan Pada",
+  "usedOn": "Digunakan Pada",
   "amount": "Jumlah",
   "dateAndTime": "Tanggal dan Waktu",
   "changeLanguage": "Ganti Bahasa",
+
   "emotion": "Emosi",
   "emotionRecorder": "Perekam Emosi",
   "emojiPicker": "Pemilih Emoji",
   "placeEmoji": "Tempatkan Emoji",
+
   "workoutRecorder": "Perekam Latihan",
   "selectExercise": "Pilih Latihan",
   "workout": "Latihan",
@@ -25,6 +27,7 @@
   "sitUps": "Sit Ups",
   "pushUps": "Push Ups",
   "planks": "Planks",
+
   "dietRecorder": "Perekam Diet",
   "diet": "Diet",
   "selectFood": "Pilih Makanan",
@@ -35,6 +38,15 @@
   "enterNewAmount": "Masukkan Jumlah Baru",
   "cancel": "Batal",
   "ok": "OK",
+
   "settings": "Settings",
-  "appTitle": "hallo pls"
+  "appTitle": "hallo pls",
+
+  "lastRecorded": "Perekaman Terakhir",
+  "lastRecordingTime": "Waktu Perekaman Terakhir",
+  "recordingPoints": "Perekaman Poin",
+  "dedicationLevel": "Level Dedikasi",
+
+  "none": "Tidak Ada",
+  "never": "Tidak Pernah"
 }

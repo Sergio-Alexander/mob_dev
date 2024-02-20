@@ -5,6 +5,8 @@ import 'package:mob_dev/app_status.dart';
 import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/workout_recorder/workout_recorder_entity.dart';
 
+import 'package:mob_dev/app_localization.dart';
+
 class WorkoutRecorder extends StatefulWidget {
   final RecorderDatabase? database;
   const WorkoutRecorder({Key? key, this.database}):super(key:key);
@@ -20,15 +22,32 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
   // final List<Map<String, dynamic>> workoutData = [];
 
 
-  String selectedExercise = 'Bouldering';
-  final List<String> exercises = [
-    'Bouldering', 'Bench Press', 'Squats', '6x400m Run', 'Mountain Climbers',
-    'Leg Press', 'Sit Ups', 'Push Ups', 'Planks',
-  ];
-
+  String selectedExercise = '';
+  // final List<String> exercises = [
+  //   'Bouldering', 'Bench Press', 'Squats', '6x400m Run', 'Mountain Climbers',
+  //   'Leg Press', 'Sit Ups', 'Push Ups', 'Planks',
+  // ];
+  List<String> exercises = [];
   void initState(){
     super.initState();
+    // selectedExercise = AppLocalizations.of(context).translate('bouldering');
     _loadWorkouts();
+  }
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    exercises = [
+      AppLocalizations.of(context).translate('bouldering'),
+      AppLocalizations.of(context).translate('benchPress'),
+      AppLocalizations.of(context).translate('squats'),
+      AppLocalizations.of(context).translate('400mRun'),
+      AppLocalizations.of(context).translate('mountainClimbers'),
+      AppLocalizations.of(context).translate('legPress'),
+      AppLocalizations.of(context).translate('sitUps'),
+      AppLocalizations.of(context).translate('pushUps'),
+      AppLocalizations.of(context).translate('planks'),
+    ];
+    selectedExercise = exercises.contains(selectedExercise) ? selectedExercise : exercises[0];
   }
 
   Future<void> _loadWorkouts() async {
@@ -94,11 +113,11 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Workout Recorder'),
+        title: Text(AppLocalizations.of(context).translate('workoutRecorder')),
       ),
       body: Column(
         children: [
-          const Text('Select Exercise'),
+          Text(AppLocalizations.of(context).translate('selectExercise')),
           DropdownButton<String>(
             value: selectedExercise,
             onChanged: (String? newValue) {
@@ -111,29 +130,29 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
             items: exercises.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(AppLocalizations.of(context).translate(value.toLowerCase())),
               );
             }).toList(),
           ),
-          const Text('Quantity'),
+          Text(AppLocalizations.of(context).translate('quantity')),
           TextField(
             controller: _quantityController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              hintText: 'Enter Reps',
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context).translate('enterReps'),
             ),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: _recordWorkout, // Use _recordWorkout instead of _logWorkout
-            child: const Text('Log Workout'),
+            child: Text(AppLocalizations.of(context).translate('logWorkout')),
           ),
           // ElevatedButton(
           //   onPressed: _clearWorkout,
           //   child: const Text('Clear Logs'),
           // ),
           const Divider(),
-          const Text('Workout Logs'),
+          Text(AppLocalizations.of(context).translate('workoutLogs')),
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
@@ -145,8 +164,8 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Amount: ${workoutData[index].quantity}'),
-                      Text('Date and Time: ${workoutData[index].timestamp.toString()}'),
+                      Text('${AppLocalizations.of(context).translate('amount')}: ${workoutData[index].quantity}'),
+                      Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${workoutData[index].timestamp.toString()}'),
 
                     ],
                   ),

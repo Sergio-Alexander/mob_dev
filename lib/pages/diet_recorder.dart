@@ -6,6 +6,8 @@ import 'package:mob_dev/app_status.dart';
 import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/diet_recorder/diet_recorder_entity.dart';
 
+import 'package:mob_dev/app_localization.dart';
+
 
 
 class DietRecorder extends StatefulWidget {
@@ -109,14 +111,15 @@ class _DietRecorderState extends State<DietRecorder> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: const Text('Diet Recorder')),
+          title: Text(AppLocalizations.of(context).translate('dietRecorder')),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             DropdownButton<String>(
               key: const Key('foodDropdown'),
               value: selectedFood,
-              hint: const Text('Select Food'),
+              hint: Text(AppLocalizations.of(context).translate('selectFood')),
               onChanged: (newValue) {
                 setState(() {
                   selectedFood = newValue;
@@ -126,33 +129,33 @@ class _DietRecorderState extends State<DietRecorder> {
               items: uniqueFoodItems.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(AppLocalizations.of(context).translate(value)),
                 );
               }).toList(),
             ),
 
             TextField(
               controller: _foodController,
-              decoration: const InputDecoration(
-                hintText: 'Enter Food',
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context).translate('enterFood'),
               ),
             ),
             const SizedBox(height: 50),
-            const Text('Amount'),
+            Text(AppLocalizations.of(context).translate('amount')),
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: 'Enter Amount',
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context).translate('enterAmount'),
               ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _recordDiet,
-              child: const Text('Log Food'),
+              child: Text(AppLocalizations.of(context).translate('logFood')),
             ),
             const Divider(),
-            const Text('Food Logs'),
+            Text(AppLocalizations.of(context).translate('foodLogs')),
             SizedBox(
               height: 200,
               child: ListView.builder(
@@ -163,8 +166,8 @@ class _DietRecorderState extends State<DietRecorder> {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Amount: ${dietData[index].amount}'),
-                        Text('Date and Time: ${dietData[index].timestamp.toString()}'),
+                        Text('${AppLocalizations.of(context).translate('amount')}: ${dietData[index].amount}'),
+                        Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${dietData[index].timestamp.toString()}'),
                       ],
                     ),
 
@@ -183,23 +186,23 @@ class _DietRecorderState extends State<DietRecorder> {
                               builder: (context) {
                                 final controller = TextEditingController();
                                 return AlertDialog(
-                                  title: const Text('Enter new amount'),
+                                  title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
                                   content: TextField(
                                     controller: controller,
                                     keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter Amount',
+                                    decoration: InputDecoration(
+                                      hintText: AppLocalizations.of(context).translate('enterAmount'),
                                     ),
                                   ),
                                   actions: [
                                     TextButton(
-                                      child: const Text('Cancel'),
+                                      child: Text(AppLocalizations.of(context).translate('cancel')),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
                                     ),
                                     TextButton(
-                                      child: const Text('OK'),
+                                      child: Text(AppLocalizations.of(context).translate('ok')),
                                       onPressed: () {
                                         Navigator.of(context).pop(int.parse(controller.text));
                                       },

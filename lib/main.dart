@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mob_dev/app_localization.dart';
+import 'package:mob_dev/pages/settings.dart';
 
 import 'package:provider/provider.dart';
 import 'app_status.dart';
@@ -81,6 +82,16 @@ class _MyAppState extends State<MyApp> {
   void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
+    });
+  }
+
+  void toggleTheme() {
+    setState(() {
+      if (currentTheme == ThemeStyle.material) {
+        currentTheme = ThemeStyle.cupertino;
+      } else {
+        currentTheme = ThemeStyle.material;
+      }
     });
   }
 

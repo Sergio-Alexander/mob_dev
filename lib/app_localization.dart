@@ -16,15 +16,15 @@ class AppLocalizations {
   }
 
   Future<bool> load() async {
-    print("PLS WORKKKK FUCK");
+    String filePath = 'i18n/${locale.languageCode}.json';
+    print('Loading localization data from: $filePath');
     try {
-      print("are my json files loading???");
-      String jsonString = await rootBundle.loadString('i18n/${locale.languageCode}.json');
+      String jsonString = await rootBundle.loadString(filePath);
       Map<String, dynamic> jsonMap = json.decode(jsonString);
       _localizedStrings = jsonMap.map((key, value) {
         return MapEntry(key, value.toString());
       });
-      print("ITS LOADING maybe??");
+      print('Loaded localization data: $_localizedStrings');
       return true;
     } catch (e, stacktrace) {
       print('Error loading localization files: $e');
@@ -35,7 +35,6 @@ class AppLocalizations {
 
 
   String translate(String key) {
-    print("hiiiii");
     return _localizedStrings[key] ?? key; // Fallback to the key if the translation does not exist
   }
 }
@@ -50,9 +49,10 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   }
 
   @override
-  Future<AppLocalizations> load(Locale locale) {
-    print("IS THIS LOADING???");
-    return SynchronousFuture<AppLocalizations>(AppLocalizations(locale));
+  Future<AppLocalizations> load(Locale locale) async{
+    AppLocalizations appLocalizations = AppLocalizations(locale);
+    await appLocalizations.load();
+    return appLocalizations;
   }
 
   @override

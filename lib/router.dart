@@ -28,10 +28,15 @@ class StatusWidget extends StatelessWidget {
     final recordingState = Provider.of<RecordingState>(context);
     return Column(
       children: [
-        Text('Last Recorded: ${recordingState.lastRecordingType ?? 'None'}'),
-        Text('Last Recording Time: ${recordingState.lastRecordingTime ?? 'Never'}'),
-        Text('Recording Points: ${recordingState.recordingPoints}'),
-        Text('Dedication Level: ${recordingState.calculateDL()}'),
+        // Text('Last Recorded: ${recordingState.lastRecordingType ?? 'None'}'),
+        // Text('Last Recording Time: ${recordingState.lastRecordingTime ?? 'Never'}'),
+        // Text('Recording Points: ${recordingState.recordingPoints}'),
+        // Text('Dedication Level: ${recordingState.calculateDL()}'),
+
+        Text(AppLocalizations.of(context).translate('lastRecorded') + ': ${recordingState.lastRecordingType ?? AppLocalizations.of(context).translate('none')}'),
+        Text(AppLocalizations.of(context).translate('lastRecordingTime') + ': ${recordingState.lastRecordingTime ?? AppLocalizations.of(context).translate('never')}'),
+        Text(AppLocalizations.of(context).translate('recordingPoints') + ': ${recordingState.recordingPoints}'),
+        Text(AppLocalizations.of(context).translate('dedicationLevel') + ': ${recordingState.calculateDL()}'),
       ],
     );
   }
@@ -44,7 +49,6 @@ class _ShellWidgetState extends State<ShellWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: Text('CPSC-MobDev: Sergio'),
         title: Text(AppLocalizations.of(context).translate('appTitle')),
         centerTitle: true,
       ),
@@ -76,11 +80,11 @@ class _ShellWidgetState extends State<ShellWidget> {
               context.go('/settings');
           }
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.sentiment_very_satisfied), label: 'Emotion'),
-          BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: 'Diet'),
-          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workout'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.sentiment_very_satisfied), label: AppLocalizations.of(context).translate('emotion')),
+          BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: AppLocalizations.of(context).translate('diet')),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: AppLocalizations.of(context).translate('workout')),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: AppLocalizations.of(context).translate('settings')),
         ],
       ),
     );

@@ -63,9 +63,8 @@ class _EmotionRecorder extends State<EmotionRecorder> {
         print('Error: $e');
       }
     }
-    Provider.of<RecordingState>(context, listen: false).record('Emotion');
+    Provider.of<RecordingState>(context, listen: false).record(AppLocalizations.of(context).translate('emotion'));
   }
-
 
   Future<void> _deleteEmotion(EmotionRecorderEntity emotion) async {
     if(widget.database != null){
@@ -124,7 +123,7 @@ class _EmotionRecorder extends State<EmotionRecorder> {
                 Flexible(
                   child: ElevatedButton(
                     onPressed: _recordEmotion,
-                    child: const Text('Place Emoji'),
+                    child: Text(AppLocalizations.of(context).translate('placeEmoji')),
                   ),
                 ),
               ],
@@ -134,7 +133,7 @@ class _EmotionRecorder extends State<EmotionRecorder> {
             //   child: const Text('Clear Logs'),
             // ),
             const Divider(),
-            const Text('Logs'),
+            Text(AppLocalizations.of(context).translate('logs')),
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
@@ -145,9 +144,9 @@ class _EmotionRecorder extends State<EmotionRecorder> {
                       emojiData[index].emoji,
                       style: const TextStyle(fontSize: 24),
                     ),
-                    title: Text(
-                      'Used On: ${emojiData[index].timestamp.toString()}',
-                    ),
+                      title: Text(
+                        '${AppLocalizations.of(context).translate('usedOn')}: ${emojiData[index].timestamp.toString()}',
+                      ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () => _deleteEmotion(emojiData[index]),
@@ -161,3 +160,5 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     );
   }
 }
+
+

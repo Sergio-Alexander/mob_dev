@@ -1,7 +1,7 @@
 {
   "error": "Error",
   "logs": "Logs",
-  "UsedOn": "Used On",
+  "usedOn": "Used On",
   "amount": "Amount",
   "dateAndTime": "Date and Time",
   "changeLanguage": "Change Language",
@@ -45,5 +45,8 @@
   "dedicationLevel": "Dedication Level",
 
   "settings": "Settings",
-  "appTitle": "Hello pls"
+  "appTitle": "CPSC-MobDev-SERGIO",
+
+  "none": "None",
+  "never": "Never"
 }
