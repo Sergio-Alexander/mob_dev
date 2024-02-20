@@ -41,9 +41,14 @@ enum ThemeStyle {
   cupertino,
 }
 
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
 ThemeStyle currentTheme = ThemeStyle.material;
 
-class SettingsPage extends StatelessWidget {
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,6 +83,8 @@ class SettingsPage extends StatelessWidget {
                 : Text(AppLocalizations.of(context).translate('cupertino')),
             onTap: () {
               MyApp.of(context)?.toggleTheme();
+              setState(() {
+              });
             },
           ),
         ],

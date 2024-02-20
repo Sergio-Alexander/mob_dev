@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:mob_dev/app_status.dart';
 
@@ -6,6 +7,7 @@ import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dart';
 
 import 'package:mob_dev/app_localization.dart';
+import 'package:mob_dev/theme_widgets.dart';
 
 class EmotionRecorder extends StatefulWidget {
 
@@ -86,7 +88,7 @@ class _EmotionRecorder extends State<EmotionRecorder> {
     });
   }
 
-//
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,69 +96,78 @@ class _EmotionRecorder extends State<EmotionRecorder> {
         title: Text(AppLocalizations.of(context).translate('emotionRecorder')),
         centerTitle: true,
       ),
-
-        body: Column(
-          children: [
-            Text(AppLocalizations.of(context).translate('emojiPicker')),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    value: selectedEmoji,
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() {
+      body: Column(
+        children: [
+          Text(AppLocalizations.of(context).translate('emojiPicker')),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: currentTheme == ThemeStyle.material
+                    ? DropdownButton<String>(
+                  isExpanded: true,
+                  value: selectedEmoji,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      setState(() {
                         selectedEmoji = newValue;
                       });
                     }
                   },
-                    items: emojiList.map<DropdownMenuItem<String>>((String value) {
+                  items: emojiList.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
                     );
-                    }).toList(),
-                  ),
-                ),
-                Flexible(
-                  child: ElevatedButton(
-                    onPressed: _recordEmotion,
-                    child: Text(AppLocalizations.of(context).translate('placeEmoji')),
-                  ),
-                ),
-              ],
-            ),
-            // ElevatedButton(
-            //   onPressed: _clearEmojis,
-            //   child: const Text('Clear Logs'),
-            // ),
-            const Divider(),
-            Text(AppLocalizations.of(context).translate('logs')),
-            Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: emojiData.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Text(
-                      emojiData[index].emoji,
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                      title: Text(
-                        '${AppLocalizations.of(context).translate('usedOn')}: ${emojiData[index].timestamp.toString()}',
-                      ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _deleteEmotion(emojiData[index]),
-                    )
-                  );
+                  }).toList(),
+                )
+                    : themedDropdownButton(
+                  context: context,
+                  items: emojiList,
+                  selectedItem: selectedEmoji,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        selectedEmoji = newValue;
+                      });
+                    }
                   },
+                ),
               ),
+              Flexible(
+                child: themedButton(
+                  context,
+                  AppLocalizations.of(context).translate('placeEmoji'),
+                  _recordEmotion,
+                ),
+              ),
+            ],
+          ),
+          const Divider(),
+          Text(AppLocalizations.of(context).translate('logs')),
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: emojiData.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Text(
+                    emojiData[index].emoji,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                  title: Text(
+                    '${AppLocalizations.of(context).translate('usedOn')}: ${emojiData[index].timestamp.toString()}',
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => _deleteEmotion(emojiData[index]),
+                  ),
+                );
+              },
             ),
-          ],
-        )
+          ),
+        ],
+      ),
     );
   }
 }

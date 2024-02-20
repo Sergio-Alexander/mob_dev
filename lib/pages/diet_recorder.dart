@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:mob_dev/app_status.dart';
 
@@ -7,6 +9,8 @@ import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/diet_recorder/diet_recorder_entity.dart';
 
 import 'package:mob_dev/app_localization.dart';
+
+import '../theme_widgets.dart';
 
 
 
@@ -66,7 +70,9 @@ class _DietRecorderState extends State<DietRecorder> {
 
         _foodController.clear();
         _amountController.clear();
-
+        setState(() {
+          selectedFood = null;
+        });
         FocusScope.of(context).unfocus();
       } catch (e) {
         print('Error: $e');
@@ -103,54 +109,51 @@ class _DietRecorderState extends State<DietRecorder> {
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
+    if (selectedFood == null || !uniqueFoodItems.contains(selectedFood)) {
+      selectedFood = uniqueFoodItems.isNotEmpty ? uniqueFoodItems.first : '';
+    }
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text(AppLocalizations.of(context).translate('dietRecorder')),
+        centerTitle: true,
+        title: Text(AppLocalizations.of(context).translate('dietRecorder')),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            DropdownButton<String>(
-              key: const Key('foodDropdown'),
-              value: selectedFood,
-              hint: Text(AppLocalizations.of(context).translate('selectFood')),
-              onChanged: (newValue) {
-                setState(() {
-                  selectedFood = newValue;
-                  _foodController.text = newValue ?? '';
-                });
+            themedDropdownButton(
+              context: context,
+              items: uniqueFoodItems.toList(),
+              selectedItem: selectedFood ?? '',
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    selectedFood = newValue;
+                    _foodController.text = newValue;
+                  });
+                }
               },
-              items: uniqueFoodItems.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(AppLocalizations.of(context).translate(value)),
-                );
-              }).toList(),
             ),
 
-            TextField(
+            themedTextField(
               controller: _foodController,
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context).translate('enterFood'),
-              ),
+              textHint: AppLocalizations.of(context).translate('enterFood'),
             ),
             const SizedBox(height: 50),
             Text(AppLocalizations.of(context).translate('amount')),
-            TextField(
+            themedNumberPadField(
               controller: _amountController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context).translate('enterAmount'),
-              ),
+              placeholder: AppLocalizations.of(context).translate('enterAmount'),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
+            currentTheme == ThemeStyle.material
+                ? ElevatedButton(
+              onPressed: _recordDiet,
+              child: Text(AppLocalizations.of(context).translate('logFood')),
+            )
+                : CupertinoButton(
+              color: Colors.blue,
               onPressed: _recordDiet,
               child: Text(AppLocalizations.of(context).translate('logFood')),
             ),
@@ -162,62 +165,61 @@ class _DietRecorderState extends State<DietRecorder> {
                 itemCount: dietData.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(dietData[index].diet),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('${AppLocalizations.of(context).translate('amount')}: ${dietData[index].amount}'),
-                        Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${dietData[index].timestamp.toString()}'),
-                      ],
-                    ),
-
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => _deleteDiet(dietData[index]),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () async {
-                            final newAmount = await showDialog<int>(
-                              context: context,
-                              builder: (context) {
-                                final controller = TextEditingController();
-                                return AlertDialog(
-                                  title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
-                                  content: TextField(
-                                    controller: controller,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context).translate('enterAmount'),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: Text(AppLocalizations.of(context).translate('cancel')),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text(AppLocalizations.of(context).translate('ok')),
-                                      onPressed: () {
-                                        Navigator.of(context).pop(int.parse(controller.text));
-                                      },
-                                    ),
-                                  ],
+                      title: Text(dietData[index].diet),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${AppLocalizations.of(context).translate('amount')}: ${dietData[index].amount}'),
+                          Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${dietData[index].timestamp.toString()}'),
+                        ],
+                      ),
+                      trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () => _deleteDiet(dietData[index]),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () async {
+                                final newAmount = await showDialog<int>(
+                                  context: context,
+                                  builder: (context) {
+                                    final controller = TextEditingController();
+                                    return AlertDialog(
+                                      title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
+                                      content: TextField(
+                                        controller: controller,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context).translate('enterAmount'),
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text(AppLocalizations.of(context).translate('cancel')),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text(AppLocalizations.of(context).translate('ok')),
+                                          onPressed: () {
+                                            Navigator.of(context).pop(int.parse(controller.text));
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
+                                if (newAmount != null) {
+                                  _updateDiet(dietData[index], newAmount);
+                                }
                               },
-                            );
-                            if (newAmount != null) {
-                              _updateDiet(dietData[index], newAmount);
-                            }
-                          },
-                        ),
-                      ]
-                    )
+                            ),
+                          ]
+                      )
                   );
                 },
               ),
@@ -227,6 +229,8 @@ class _DietRecorderState extends State<DietRecorder> {
       ),
     );
   }
+  //
+
 
   @override
   void dispose() {

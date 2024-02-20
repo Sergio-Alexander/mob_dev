@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:mob_dev/app_status.dart';
 
@@ -6,6 +8,7 @@ import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/workout_recorder/workout_recorder_entity.dart';
 
 import 'package:mob_dev/app_localization.dart';
+import 'package:mob_dev/theme_widgets.dart';
 
 class WorkoutRecorder extends StatefulWidget {
   final RecorderDatabase? database;
@@ -118,8 +121,10 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
       body: Column(
         children: [
           Text(AppLocalizations.of(context).translate('selectExercise')),
-          DropdownButton<String>(
-            value: selectedExercise,
+          themedDropdownButton(
+            context: context,
+            items: exercises,
+            selectedItem: selectedExercise,
             onChanged: (String? newValue) {
               if (newValue != null) {
                 setState(() {
@@ -127,30 +132,23 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
                 });
               }
             },
-            items: exercises.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(AppLocalizations.of(context).translate(value.toLowerCase())),
-              );
-            }).toList(),
           ),
           Text(AppLocalizations.of(context).translate('quantity')),
-          TextField(
-            controller: _quantityController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context).translate('enterReps'),
-            ),
+          themedNumberPadField(
+              controller: _quantityController,
+              placeholder: AppLocalizations.of(context).translate('enterReps')
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _recordWorkout, // Use _recordWorkout instead of _logWorkout
+          currentTheme == ThemeStyle.material
+              ? ElevatedButton(
+            onPressed: _recordWorkout,
+            child: Text(AppLocalizations.of(context).translate('logWorkout')),
+          )
+              : CupertinoButton(
+            color: Colors.blue,
+            onPressed: _recordWorkout,
             child: Text(AppLocalizations.of(context).translate('logWorkout')),
           ),
-          // ElevatedButton(
-          //   onPressed: _clearWorkout,
-          //   child: const Text('Clear Logs'),
-          // ),
           const Divider(),
           Text(AppLocalizations.of(context).translate('workoutLogs')),
           Expanded(
@@ -160,13 +158,11 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(workoutData[index].workout),
-                  subtitle:
-                  Column(
+                  subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${AppLocalizations.of(context).translate('amount')}: ${workoutData[index].quantity}'),
                       Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${workoutData[index].timestamp.toString()}'),
-
                     ],
                   ),
                   trailing: IconButton(
