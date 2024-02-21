@@ -110,3 +110,82 @@ Widget themedDropdownButton({required List<String> items, required String select
     );
   }
 }
+
+Widget themedIconButton({required IconData materialIcon, required IconData cupertinoIcon, required VoidCallback onPressed}) {
+  if (currentTheme == ThemeStyle.material) {
+    return IconButton(
+      icon: Icon(materialIcon),
+      onPressed: onPressed,
+    );
+  } else {
+    return CupertinoButton(
+      child: Icon(cupertinoIcon),
+      onPressed: onPressed,
+    );
+  }
+}
+
+
+Future<int?> themedAlertDialog(BuildContext context, String title, String placeholder) {
+  if (currentTheme == ThemeStyle.material) {
+    final controller = TextEditingController();
+    return showDialog<int>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: TextField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: placeholder,
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(int.parse(controller.text));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    final controller = TextEditingController();
+    return showCupertinoDialog<int>(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: CupertinoTextField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            placeholder: placeholder,
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(int.parse(controller.text));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

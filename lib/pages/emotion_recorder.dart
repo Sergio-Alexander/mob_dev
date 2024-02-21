@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
@@ -158,8 +159,9 @@ class _EmotionRecorder extends State<EmotionRecorder> {
                   title: Text(
                     '${AppLocalizations.of(context).translate('usedOn')}: ${emojiData[index].timestamp.toString()}',
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
+                  trailing: themedIconButton(
+                    materialIcon: Icons.delete,
+                    cupertinoIcon: CupertinoIcons.trash,
                     onPressed: () => _deleteEmotion(emojiData[index]),
                   ),
                 );

@@ -165,8 +165,9 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
                       Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${workoutData[index].timestamp.toString()}'),
                     ],
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
+                  trailing: themedIconButton(
+                    materialIcon: Icons.delete,
+                    cupertinoIcon: CupertinoIcons.trash,
                     onPressed: () => _deleteWorkout(workoutData[index]),
                   ),
                 );

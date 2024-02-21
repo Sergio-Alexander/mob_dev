@@ -164,62 +164,136 @@ class _DietRecorderState extends State<DietRecorder> {
               child: ListView.builder(
                 itemCount: dietData.length,
                 itemBuilder: (context, index) {
+                  // return ListTile(
+                  //     title: Text(dietData[index].diet),
+                  //     subtitle: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text('${AppLocalizations.of(context).translate('amount')}: ${dietData[index].amount}'),
+                  //         Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${dietData[index].timestamp.toString()}'),
+                  //       ],
+                  //     ),
+                  //     trailing: Row(
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: [
+                  //           IconButton(
+                  //             icon: const Icon(Icons.delete),
+                  //             onPressed: () => _deleteDiet(dietData[index]),
+                  //           ),
+                  //           IconButton(
+                  //             icon: const Icon(Icons.edit),
+                  //             onPressed: () async {
+                  //               final newAmount = await showDialog<int>(
+                  //                 context: context,
+                  //                 builder: (context) {
+                  //                   final controller = TextEditingController();
+                  //                   return AlertDialog(
+                  //                     title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
+                  //                     content: TextField(
+                  //                       controller: controller,
+                  //                       keyboardType: TextInputType.number,
+                  //                       decoration: InputDecoration(
+                  //                         hintText: AppLocalizations.of(context).translate('enterAmount'),
+                  //                       ),
+                  //                     ),
+                  //                     actions: [
+                  //                       TextButton(
+                  //                         child: Text(AppLocalizations.of(context).translate('cancel')),
+                  //                         onPressed: () {
+                  //                           Navigator.of(context).pop();
+                  //                         },
+                  //                       ),
+                  //                       TextButton(
+                  //                         child: Text(AppLocalizations.of(context).translate('ok')),
+                  //                         onPressed: () {
+                  //                           Navigator.of(context).pop(int.parse(controller.text));
+                  //                         },
+                  //                       ),
+                  //                     ],
+                  //                   );
+                  //                 },
+                  //               );
+                  //               if (newAmount != null) {
+                  //                 _updateDiet(dietData[index], newAmount);
+                  //               }
+                  //             },
+                  //           ),
+                  //         ]
+                  //     )
+                  // );
                   return ListTile(
-                      title: Text(dietData[index].diet),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('${AppLocalizations.of(context).translate('amount')}: ${dietData[index].amount}'),
-                          Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${dietData[index].timestamp.toString()}'),
-                        ],
-                      ),
-                      trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () => _deleteDiet(dietData[index]),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () async {
-                                final newAmount = await showDialog<int>(
-                                  context: context,
-                                  builder: (context) {
-                                    final controller = TextEditingController();
-                                    return AlertDialog(
-                                      title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
-                                      content: TextField(
-                                        controller: controller,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                          hintText: AppLocalizations.of(context).translate('enterAmount'),
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          child: Text(AppLocalizations.of(context).translate('cancel')),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        TextButton(
-                                          child: Text(AppLocalizations.of(context).translate('ok')),
-                                          onPressed: () {
-                                            Navigator.of(context).pop(int.parse(controller.text));
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                                if (newAmount != null) {
-                                  _updateDiet(dietData[index], newAmount);
-                                }
-                              },
-                            ),
-                          ]
-                      )
+                    title: Text(dietData[index].diet),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${AppLocalizations.of(context).translate('amount')}: ${dietData[index].amount}'),
+                        Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${dietData[index].timestamp.toString()}'),
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        themedIconButton(
+                          materialIcon: Icons.delete,
+                          cupertinoIcon: CupertinoIcons.trash,
+                          onPressed: () => _deleteDiet(dietData[index]),
+                        ),
+                        // themedIconButton(
+                        //   materialIcon: Icons.edit,
+                        //   cupertinoIcon: CupertinoIcons.pencil,
+                        //   onPressed: () async {
+                        //     final newAmount = await showDialog<int>(
+                        //       context: context,
+                        //       builder: (context) {
+                        //         final controller = TextEditingController();
+                        //         return AlertDialog(
+                        //           title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
+                        //           content: TextField(
+                        //             controller: controller,
+                        //             keyboardType: TextInputType.number,
+                        //             decoration: InputDecoration(
+                        //               hintText: AppLocalizations.of(context).translate('enterAmount'),
+                        //             ),
+                        //           ),
+                        //           actions: [
+                        //             TextButton(
+                        //               child: Text(AppLocalizations.of(context).translate('cancel')),
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop();
+                        //               },
+                        //             ),
+                        //             TextButton(
+                        //               child: Text(AppLocalizations.of(context).translate('ok')),
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop(int.parse(controller.text));
+                        //               },
+                        //             ),
+                        //           ],
+                        //         );
+                        //       },
+                        //     );
+                        //     if (newAmount != null) {
+                        //       _updateDiet(dietData[index], newAmount);
+                        //     }
+                        //   },
+                        // ),
+
+                        themedIconButton(
+                          materialIcon: Icons.edit,
+                          cupertinoIcon: CupertinoIcons.pencil,
+                          onPressed: () async {
+                            final newAmount = await themedAlertDialog(
+                              context,
+                              AppLocalizations.of(context).translate('enterNewAmount'),
+                              AppLocalizations.of(context).translate('enterAmount'),
+                            );
+                            if (newAmount != null) {
+                              _updateDiet(dietData[index], newAmount);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
