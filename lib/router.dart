@@ -23,17 +23,23 @@ class ShellWidget extends StatefulWidget {
 class StatusWidget extends StatelessWidget {
   const StatusWidget({super.key});
 
+  String getLastRecordingType(BuildContext context, String? lastRecordingType) {
+    Map<String, String> recordingTypes = {
+      'Emotion': AppLocalizations.of(context).translate('emotion'),
+      'Diet': AppLocalizations.of(context).translate('diet'),
+      'Workout': AppLocalizations.of(context).translate('workout'),
+    };
+
+    return recordingTypes[lastRecordingType] ?? AppLocalizations.of(context).translate('none');
+  }
+
   @override
   Widget build(BuildContext context) {
     final recordingState = Provider.of<RecordingState>(context);
     return Column(
       children: [
-        // Text('Last Recorded: ${recordingState.lastRecordingType ?? 'None'}'),
-        // Text('Last Recording Time: ${recordingState.lastRecordingTime ?? 'Never'}'),
-        // Text('Recording Points: ${recordingState.recordingPoints}'),
-        // Text('Dedication Level: ${recordingState.calculateDL()}'),
-
-        Text(AppLocalizations.of(context).translate('lastRecorded') + ': ${recordingState.lastRecordingType ?? AppLocalizations.of(context).translate('none')}'),
+        // Text(AppLocalizations.of(context).translate('lastRecorded') + ': ${recordingState.lastRecordingType ?? AppLocalizations.of(context).translate('none')}'),
+        Text(AppLocalizations.of(context).translate('lastRecorded') + ': ${getLastRecordingType(context, recordingState.lastRecordingType)}'),
         Text(AppLocalizations.of(context).translate('lastRecordingTime') + ': ${recordingState.lastRecordingTime ?? AppLocalizations.of(context).translate('never')}'),
         Text(AppLocalizations.of(context).translate('recordingPoints') + ': ${recordingState.recordingPoints}'),
         Text(AppLocalizations.of(context).translate('dedicationLevel') + ': ${recordingState.calculateDL()}'),

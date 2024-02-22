@@ -66,7 +66,7 @@ class _EmotionRecorder extends State<EmotionRecorder> {
         print('Error: $e');
       }
     }
-    Provider.of<RecordingState>(context, listen: false).record(AppLocalizations.of(context).translate('emotion'));
+    Provider.of<RecordingState>(context, listen: false).record(AppLocalizations.of(context).translate('Emotion'));
   }
 
   Future<void> _deleteEmotion(EmotionRecorderEntity emotion) async {

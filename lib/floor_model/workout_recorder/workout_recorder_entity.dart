@@ -5,12 +5,12 @@ import '../date_time_converter.dart';
 class WorkoutRecorderEntity {
   @PrimaryKey(autoGenerate: true)
   final int? id;
-  final String workout;
+  final String workoutID;
   final int quantity;
   final int points;
 
   @TypeConverters([DateTimeConverter])
   final DateTime timestamp;
 
-  WorkoutRecorderEntity(this.id, this.workout, this.quantity, this.points, this.timestamp);
+  WorkoutRecorderEntity(this.id, this.workoutID, this.quantity, this.points, this.timestamp);
 }

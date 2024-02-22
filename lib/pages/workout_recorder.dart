@@ -26,16 +26,14 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
 
 
   String selectedExercise = '';
-  // final List<String> exercises = [
-  //   'Bouldering', 'Bench Press', 'Squats', '6x400m Run', 'Mountain Climbers',
-  //   'Leg Press', 'Sit Ups', 'Push Ups', 'Planks',
-  // ];
+
   List<String> exercises = [];
   void initState(){
     super.initState();
-    // selectedExercise = AppLocalizations.of(context).translate('bouldering');
     _loadWorkouts();
   }
+
+
 
   void didChangeDependencies(){
     super.didChangeDependencies();
@@ -51,7 +49,9 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
       AppLocalizations.of(context).translate('planks'),
     ];
     selectedExercise = exercises.contains(selectedExercise) ? selectedExercise : exercises[0];
+    _loadWorkouts();
   }
+
 
   Future<void> _loadWorkouts() async {
     if(widget.database != null){
@@ -70,7 +70,7 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
     if(widget.database != null){
       final points = Provider.of<RecordingState>(context, listen: false).points;
       workout = WorkoutRecorderEntity(null, selectedExercise, int.parse(quantity),points, DateTime.now());
-
+      print('Workout ID: ${workout.workoutID}');
     }
 
     if (workout != null){
@@ -104,6 +104,25 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
   }
 
 
+  String getWorkoutName(BuildContext context, String workoutID) {
+    Map<String, String> workoutNames = {
+      'Bouldering': AppLocalizations.of(context).translate('bouldering'),
+      'Bench Press': AppLocalizations.of(context).translate('benchPress'),
+      'Squats': AppLocalizations.of(context).translate('squats'),
+      '6x400m Run': AppLocalizations.of(context).translate('400mRun'),
+      'Mountain Climbers': AppLocalizations.of(context).translate('mountainClimbers'),
+      'Leg Press': AppLocalizations.of(context).translate('legPress'),
+      'Sit Ups': AppLocalizations.of(context).translate('sitUps'),
+      'Push Ups': AppLocalizations.of(context).translate('pushUps'),
+      'Planks': AppLocalizations.of(context).translate('planks'),
+
+      'Panjat Tebing': AppLocalizations.of(context).translate('bouldering'),
+      'Lari 6x400m': AppLocalizations.of(context).translate('400mRun'),
+    };
+
+    return workoutNames[workoutID] ?? workoutID;
+  }
+
 
   void _clearWorkout() {
     setState(() {
@@ -133,6 +152,7 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
               }
             },
           ),
+
           Text(AppLocalizations.of(context).translate('quantity')),
           themedNumberPadField(
               controller: _quantityController,
@@ -157,7 +177,8 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
               itemCount: workoutData.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(workoutData[index].workout),
+                  // title: Text(AppLocalizations.of(context).translate(workoutData[index].workoutID)),
+                  title: Text(getWorkoutName(context, workoutData[index].workoutID)),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -110,6 +110,63 @@ Widget themedDropdownButton({required List<String> items, required String select
     );
   }
 }
+//
+// Widget themedDropdownButton({
+//   required BuildContext context,
+//   required List<String> items,
+//   required String selectedItem,
+//   required ValueChanged<String?> onChanged,
+//   required String Function(String) itemTranslation,
+// }) {
+//   if (currentTheme == ThemeStyle.material) {
+//     return DropdownButton<String>(
+//       value: selectedItem,
+//       onChanged: onChanged,
+//       items: items.map<DropdownMenuItem<String>>((String value) {
+//         return DropdownMenuItem<String>(
+//           value: value,
+//           child: Text(itemTranslation(value)),
+//         );
+//       }).toList(),
+//     );
+//   } else {
+//     return CupertinoButton(
+//       child: Text(itemTranslation(selectedItem)),
+//       onPressed: () {
+//         showCupertinoModalPopup<String>(
+//           context: context,
+//           builder: (BuildContext context) {
+//             return CupertinoActionSheet(
+//               actions: [
+//                 Container(
+//                   height: 200,
+//                   child: CupertinoPicker(
+//                     scrollController: FixedExtentScrollController(
+//                       initialItem: items.indexOf(selectedItem),
+//                     ),
+//                     itemExtent: 32.0,
+//                     onSelectedItemChanged: (int index) {
+//                       onChanged(items[index]);
+//                     },
+//                     children: items.map<Text>((String value) {
+//                       return Text(itemTranslation(value));
+//                     }).toList(),
+//                   ),
+//                 ),
+//               ],
+//               cancelButton: CupertinoActionSheetAction(
+//                 child: Text('Done'),
+//                 onPressed: () {
+//                   Navigator.pop(context);
+//                 },
+//               ),
+//             );
+//           },
+//         );
+//       },
+//     );
+//   }
+// }
 
 Widget themedIconButton({required IconData materialIcon, required IconData cupertinoIcon, required VoidCallback onPressed}) {
   if (currentTheme == ThemeStyle.material) {

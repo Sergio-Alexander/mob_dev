@@ -91,7 +91,7 @@ class _$RecorderDatabase extends RecorderDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `EmotionRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `emoji` TEXT NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `WorkoutRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `workout` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `WorkoutRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `workoutID` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `DietRecorder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `diet` TEXT NOT NULL, `amount` INTEGER NOT NULL, `points` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)');
 
@@ -242,7 +242,7 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
             'WorkoutRecorder',
             (WorkoutRecorderEntity item) => <String, Object?>{
                   'id': item.id,
-                  'workout': item.workout,
+                  'workoutID': item.workoutID,
                   'quantity': item.quantity,
                   'points': item.points,
                   'timestamp': _dateTimeConverter.encode(item.timestamp)
@@ -254,7 +254,7 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
             ['id'],
             (WorkoutRecorderEntity item) => <String, Object?>{
                   'id': item.id,
-                  'workout': item.workout,
+                  'workoutID': item.workoutID,
                   'quantity': item.quantity,
                   'points': item.points,
                   'timestamp': _dateTimeConverter.encode(item.timestamp)
@@ -266,7 +266,7 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
             ['id'],
             (WorkoutRecorderEntity item) => <String, Object?>{
                   'id': item.id,
-                  'workout': item.workout,
+                  'workoutID': item.workoutID,
                   'quantity': item.quantity,
                   'points': item.points,
                   'timestamp': _dateTimeConverter.encode(item.timestamp)
@@ -293,7 +293,7 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
     return _queryAdapter.queryList('SELECT * FROM WorkoutRecorder',
         mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
             row['id'] as int?,
-            row['workout'] as String,
+            row['workoutID'] as String,
             row['quantity'] as int,
             row['points'] as int,
             _dateTimeConverter.decode(row['timestamp'] as int)));
@@ -305,7 +305,7 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
         'SELECT * FROM WorkoutRecorder WHERE id = ?1',
         mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
             row['id'] as int?,
-            row['workout'] as String,
+            row['workoutID'] as String,
             row['quantity'] as int,
             row['points'] as int,
             _dateTimeConverter.decode(row['timestamp'] as int)),
@@ -320,7 +320,7 @@ class _$WorkoutRecorderDao extends WorkoutRecorderDao {
         'SELECT * FROM WorkoutRecorder ORDER BY id DESC LIMIT 1',
         mapper: (Map<String, Object?> row) => WorkoutRecorderEntity(
             row['id'] as int?,
-            row['workout'] as String,
+            row['workoutID'] as String,
             row['quantity'] as int,
             row['points'] as int,
             _dateTimeConverter.decode(row['timestamp'] as int)));
