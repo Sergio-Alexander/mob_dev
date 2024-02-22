@@ -2,41 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mob_dev/app_localization.dart';
 import 'package:mob_dev/pages/settings.dart';
-
 import 'package:provider/provider.dart';
 import 'app_status.dart';
 import 'floor_model/recorder_database/recorder_database.dart';
 import 'router.dart';
-
 import 'database_init.dart';
-
-import 'app_localization.dart';
-
-
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return DatabaseInitializer(
-//         child: MaterialApp.router(
-//           title: 'My App',
-//           theme: ThemeData(primarySwatch: Colors.blue),
-//           routerConfig: appRouter,
-//           localizationsDelegates: [
-//             AppLocalizationsDelegate(),
-//             GlobalMaterialLocalizations.delegate,
-//             GlobalWidgetsLocalizations.delegate,
-//           ],
-//           supportedLocales: [
-//             const Locale('en', ''), // English
-//             const Locale('id', ''), // Indonesian
-//             // Add more locales here
-//           ],
-//         )
-//     );
-//   }
-// }
-
 
 void main() {
   runApp(
