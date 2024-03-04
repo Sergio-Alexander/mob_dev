@@ -9,9 +9,46 @@ import 'router.dart';
 import 'database_init.dart';
 
 import 'firebase_setup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() async{
+import 'pages/login.dart';
+//
+// void main() async{
+//
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await setupFirebase();
+//
+//   runApp(
+//     DatabaseInitializer(
+//       child: Builder(
+//         builder: (context) {
+//           final database = Provider.of<RecorderDatabase>(context, listen: false);
+//           final recordingState = RecordingState(database: database);
+//           return FutureBuilder(
+//             future: Future.wait([
+//               recordingState.loadLastStatus(),
+//             ]),
+//             builder: (context, snapshot) {
+//               if (snapshot.connectionState == ConnectionState.done) {
+//                 return ChangeNotifierProvider.value(
+//                   value: recordingState,
+//                   child: MyApp(),
+//                 );
+//               } else {
+//                 return CircularProgressIndicator();
+//               }
+//             },
+//           );
+//         },
+//       ),
+//     ),
+//   );
+// }
 
+
+
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupFirebase();
 
@@ -27,9 +64,20 @@ void main() async{
             ]),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return ChangeNotifierProvider.value(
-                  value: recordingState,
-                  child: MyApp(),
+                return StreamBuilder<User?>(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ChangeNotifierProvider.value(
+                        value: recordingState,
+                        child: MyApp(),
+                      );
+                    } else {
+                      return MaterialApp(
+                        home: LoginPage(),
+                      );
+                    }
+                  },
                 );
               } else {
                 return CircularProgressIndicator();
@@ -41,8 +89,6 @@ void main() async{
     ),
   );
 }
-
-
 
 class MyApp extends StatefulWidget {
   static _MyAppState? of(BuildContext context) =>

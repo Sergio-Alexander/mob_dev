@@ -13,6 +13,8 @@ import 'app_localization.dart';
 
 import 'pages/leaderboards.dart';
 
+import 'pages/login.dart';
+
 class ShellWidget extends StatefulWidget {
   final Widget child;
 
@@ -153,6 +155,13 @@ final GoRouter _router = GoRouter(
             builder: (BuildContext context, GoRouterState state) {
               return SettingsPage();
             }
+        ),
+
+        GoRoute(
+          path: '/login',
+          builder: (BuildContext context, GoRouterState state) {
+            return LoginPage();
+          },
         ),
 
 
