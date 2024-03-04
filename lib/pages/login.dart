@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../router.dart';
+
 // class LoginPage extends StatefulWidget {
 //   @override
 //   _LoginPageState createState() => _LoginPageState();
@@ -97,7 +99,9 @@ class _LoginPageState extends State<LoginPage> {
     // UserCredential userCredential = await _auth.signInWithCredential(credential);
 
     // Navigate to the main page after sign in
-    Navigator.pushReplacementNamed(context, '/emotion');
+    // Navigator.pushReplacementNamed(context, '/emotion');
+
+    appRouter.go('/emotion');
 
     return await _auth.signInWithCredential(credential);
   }
@@ -129,9 +133,7 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.all(15),
-                  primary: Colors.white,
                   backgroundColor: Colors.blue,
-                  onSurface: Colors.grey,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -143,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () async {
                   await signInWithGoogle(rememberMe: rememberMe);
-                  Navigator.pushReplacementNamed(context, '/emotion');
+                  Navigator.pushReplacementNamed(context, '/');
                 },
               ),
               SizedBox(height: 20),
