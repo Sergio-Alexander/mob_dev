@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "918904685601",
+    "project_id": "health-recorder-3cc42",
+    "storage_bucket": "health-recorder-3cc42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918904685601:android:030077a99f0c0647998f60",
+        "android_client_info": {
+          "package_name": "edu.seattleu.mob_dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG7iqPIEKsg1BQLTJkhYtGSHCPpMw2tbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
