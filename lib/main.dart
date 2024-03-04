@@ -8,7 +8,13 @@ import 'floor_model/recorder_database/recorder_database.dart';
 import 'router.dart';
 import 'database_init.dart';
 
-void main() {
+import 'firebase_setup.dart';
+
+void main() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupFirebase();
+
   runApp(
     DatabaseInitializer(
       child: Builder(
