@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_dev/pages/settings.dart';
@@ -49,6 +50,12 @@ class _DietRecorderState extends State<DietRecorder> {
   }
 
   Future<void> _recordDiet() async {
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'increment': 1, // Increment the points by 1
+    });
+
+
+
     DietRecorderEntity? diet;
     final String food = _foodController.text;
     final String amount = _amountController.text;
@@ -82,6 +89,10 @@ class _DietRecorderState extends State<DietRecorder> {
   }
 
   Future<void> _deleteDiet(DietRecorderEntity diet) async {
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'decrement': 1, // Decrement the points by 1
+    });
+
     if(widget.database != null){
       try{
         await widget.database!.dietRecorderDao.deleteDietRecorder(diet);

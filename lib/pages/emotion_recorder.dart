@@ -10,6 +10,8 @@ import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dar
 import 'package:mob_dev/app_localization.dart';
 import 'package:mob_dev/theme_widgets.dart';
 
+import 'package:cloud_functions/cloud_functions.dart';
+
 class EmotionRecorder extends StatefulWidget {
 
   final RecorderDatabase? database;
@@ -49,6 +51,10 @@ class _EmotionRecorder extends State<EmotionRecorder> {
   Future<void> _recordEmotion() async {
     EmotionRecorderEntity? emotion;
 
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'increment': 1, // Increment the points by 1
+    });
+
     if(widget.database != null){
       final points = Provider.of<RecordingState>(context, listen: false).points;
       emotion = EmotionRecorderEntity(null, selectedEmoji, points, DateTime.now());
@@ -66,10 +72,15 @@ class _EmotionRecorder extends State<EmotionRecorder> {
         print('Error: $e');
       }
     }
+
+
     Provider.of<RecordingState>(context, listen: false).record(AppLocalizations.of(context).translate('Emotion'));
   }
 
   Future<void> _deleteEmotion(EmotionRecorderEntity emotion) async {
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'decrement': 1, // Decrement the points by 1
+    });
     if(widget.database != null){
       try{
         await widget.database!.emotionRecorderDao.deleteEmotionRecorder(emotion);
