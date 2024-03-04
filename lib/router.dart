@@ -20,6 +20,10 @@ class ShellWidget extends StatefulWidget {
 
   const ShellWidget({Key? key, required this.child}) : super(key: key);
 
+  static _ShellWidgetState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_ShellWidgetState>();
+
+
   @override
   _ShellWidgetState createState() => _ShellWidgetState();
 }
@@ -53,7 +57,13 @@ class StatusWidget extends StatelessWidget {
 }
 
 class _ShellWidgetState extends State<ShellWidget> {
-  int _currentIndex = 0;
+  int _currentIndex = 3;
+
+  void setIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +121,7 @@ class _ShellWidgetState extends State<ShellWidget> {
 }
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/emotion',
+  initialLocation: '/leaderboards',
   routes: [
     ShellRoute(
       builder: (BuildContext context, GoRouterState state, Widget child) {

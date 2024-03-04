@@ -83,13 +83,6 @@ class _EmotionRecorder extends State<EmotionRecorder> {
   }
 
 
-  void _clearEmojis() {
-    setState(() {
-      emojiData.clear();
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,74 +1,10 @@
 // login_page.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../router.dart';
-
-// class LoginPage extends StatefulWidget {
-//   @override
-//   _LoginPageState createState() => _LoginPageState();
-// }
-//
-// class _LoginPageState extends State<LoginPage> {
-//   final FirebaseAuth _auth = FirebaseAuth.instance;
-//   final GoogleSignIn _googleSignIn = GoogleSignIn();
-//
-//   bool rememberMe = false;
-//
-//   Future<UserCredential> signInWithGoogle({required bool rememberMe}) async {
-//     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-//     final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
-//     final credential = GoogleAuthProvider.credential(
-//       accessToken: googleAuth.accessToken,
-//       idToken: googleAuth.idToken,
-//     );
-//
-//     if (rememberMe) {
-//       // Persist the user's session
-//       await _auth.setPersistence(Persistence.LOCAL);
-//     } else {
-//       // Don't persist the user's session
-//       await _auth.setPersistence(Persistence.NONE);
-//     }
-//
-//     return await _auth.signInWithCredential(credential);
-//   }
-//
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             TextButton(
-//               child: Text('Sign in with Google'),
-//               onPressed: () async {
-//                 await signInWithGoogle(rememberMe: rememberMe);
-//                 // Navigate to the leaderboard page after sign in
-//                 Navigator.pushReplacementNamed(context, '/emotion');
-//               },
-//             ),
-//
-//             CheckboxListTile(
-//               title: Text('Remember Me'),
-//               value: rememberMe,
-//               onChanged: (bool? value) {
-//                 setState(() {
-//                   rememberMe = value!;
-//                 });
-//               },
-//             ),
-//
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 
 class LoginPage extends StatefulWidget {
@@ -80,9 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  bool rememberMe = false;
-
-  Future<UserCredential> signInWithGoogle({required bool rememberMe}) async {
+  Future<UserCredential> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
     final credential = GoogleAuthProvider.credential(
@@ -90,20 +24,10 @@ class _LoginPageState extends State<LoginPage> {
       idToken: googleAuth.idToken,
     );
 
-    // if (rememberMe) {
-    //   await _auth.setPersistence(Persistence.LOCAL);
-    // } else {
-    //   await _auth.setPersistence(Persistence.NONE);
-    // }
-    //
-    // UserCredential userCredential = await _auth.signInWithCredential(credential);
+    UserCredential userCredential = await _auth.signInWithCredential(credential);
 
-    // Navigate to the main page after sign in
-    // Navigator.pushReplacementNamed(context, '/emotion');
 
-    appRouter.go('/emotion');
-
-    return await _auth.signInWithCredential(credential);
+    return userCredential;
   }
 
   @override
@@ -144,20 +68,20 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 onPressed: () async {
-                  await signInWithGoogle(rememberMe: rememberMe);
-                  Navigator.pushReplacementNamed(context, '/');
+                  await signInWithGoogle();
+                  appRouter.go('/leaderboards');
                 },
               ),
-              SizedBox(height: 20),
-              CheckboxListTile(
-                title: Text('Remember Me'),
-                value: rememberMe,
-                onChanged: (bool? value) {
-                  setState(() {
-                    rememberMe = value!;
-                  });
+
+              TextButton(
+                onPressed: () async {
+                  appRouter.go('/leaderboards'); // Navigate to the emotion page
                 },
+                child: Text('Continue without signing in'),
+
               ),
+
+
             ],
           ),
         ),
