@@ -22,30 +22,48 @@ exports.createUserDocument = functions.auth.user().onCreate((user) => {
   });
 });
 
-exports.updatePoints = functions.https.onCall((data: Data, context) => {
+exports.updatePoints = functions.https.onCall(async (data: Data, context) => {
   // Verify that the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "Please sign in");
   }
 
-  // Calculate the points (replace this with your actual calculation logic)
-  const points = calculatePoints(data);
-
   // Get a reference to the user's document in Firestore
   const userDocRef =
   admin.firestore().collection("users").doc(context.auth.uid);
 
-  if (data.increment) {
-    return userDocRef.update({
-      points: admin.firestore.FieldValue.increment(points),
-    });
-  } else if (data.decrement) {
-    return userDocRef.update({
-      points: admin.firestore.FieldValue.increment(-points),
-    });
+  // First, get the current points from the user's document
+  const doc = await userDocRef.get();
+  if (!doc.exists) {
+    throw new functions.https.HttpsError("not-found", "User does not exist");
   }
-  return null;
+
+  const currentUserPoints = doc.data()?.points || 0;
+
+  // Calculate the points (replace this with your actual calculation logic)
+  let pointsToUpdate = calculatePoints(data);
+
+  // Check if the operation is a decrement and adjust if current points are <= 0
+  if (data.decrement) {
+    // Prevent decrement if points are 0 or would become negative
+    if (currentUserPoints <= 0 || (currentUserPoints - pointsToUpdate) < 0) {
+      pointsToUpdate = 0; // Or adjust as necessary for your logic
+    } else {
+      pointsToUpdate = -pointsToUpdate;
+    }
+  }
+
+  // Update the user's points if we have a valid operation to perform
+  if (pointsToUpdate !== 0) {
+    return userDocRef.update({
+      points: admin.firestore.FieldValue.increment(pointsToUpdate),
+    });
+  } else {
+    // Return some message or indication that no operation was performed
+    return {message: "No points update needed"};
+  }
 });
+
 
 /**
  * Calculates the points based on the data.
