@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
-import 'package:mob_dev/app_status.dart';
+import 'package:mob_dev/utils/app_status.dart';
 
 import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/emotion_recorder/emotion_recorder_entity.dart';
 
-import 'package:mob_dev/app_localization.dart';
-import 'package:mob_dev/theme_widgets.dart';
+import 'package:mob_dev/utils/app_localization.dart';
+import 'package:mob_dev/utils/theme_widgets.dart';
 
 import 'package:cloud_functions/cloud_functions.dart';
 

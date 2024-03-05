@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mob_dev/app_localization.dart';
+import 'package:mob_dev/utils/app_localization.dart';
 import 'package:mob_dev/main.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../router.dart';
+import '../routing/router.dart';
 
 
 enum ThemeStyle {

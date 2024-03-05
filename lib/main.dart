@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mob_dev/app_localization.dart';
+import 'package:mob_dev/utils/app_localization.dart';
 import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
-import 'app_status.dart';
+import 'package:mob_dev/utils/app_status.dart';
 import 'floor_model/recorder_database/recorder_database.dart';
-import 'router.dart';
-import 'database_init.dart';
-import 'firebase_setup.dart';
+import 'routing/router.dart';
+import 'utils/database_init.dart';
+import 'firebase/firebase_setup.dart';
 
 
 void main() async {
