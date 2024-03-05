@@ -27,8 +27,6 @@ class _SettingsPageState extends State<SettingsPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
-
   String username = ''; // State variable for username
 
   @override
@@ -53,10 +51,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('settings')),
@@ -124,9 +118,5 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     );
-
-
-
-
   }
 }

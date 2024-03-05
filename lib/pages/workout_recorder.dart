@@ -23,9 +23,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
   List<WorkoutRecorderEntity> workoutData =[];
   final TextEditingController _quantityController = TextEditingController();
   ScrollController _scrollController = ScrollController();
-  // final List<Map<String, dynamic>> workoutData = [];
-
-
   String selectedExercise = '';
 
   List<String> exercises = [];
@@ -33,8 +30,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
     super.initState();
     _loadWorkouts();
   }
-
-
 
   void didChangeDependencies(){
     super.didChangeDependencies();
@@ -135,13 +130,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
     return workoutNames[workoutID] ?? workoutID;
   }
 
-
-  void _clearWorkout() {
-    setState(() {
-      workoutData.clear();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,12 +198,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
           ),
         ],
       ),
-
-
-
-
-
-
     );
   }
 
