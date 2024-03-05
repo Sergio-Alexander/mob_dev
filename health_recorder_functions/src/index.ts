@@ -18,7 +18,6 @@ exports.createUserDocument = functions.auth.user().onCreate((user) => {
   return userDocRef.set({
     "username": user.displayName || "Anonymous",
     "points": 0,
-    // Add any other initial properties here
   });
 });
 
@@ -95,7 +94,6 @@ exports.deleteUserData = functions.https.onCall(async (data, context) => {
   const userId = context.auth.uid;
 
   // Delete user documents from Firestore
-  // Example: Delete a document in 'users' collection. Adapt as needed.
   await admin.firestore().collection("users").doc(userId).delete();
 
   // Delete the user from Firebase Auth
