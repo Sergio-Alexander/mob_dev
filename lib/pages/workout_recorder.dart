@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
-import 'package:mob_dev/app_status.dart';
+import 'package:mob_dev/utils/app_status.dart';
 
 import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/workout_recorder/workout_recorder_entity.dart';
 
-import 'package:mob_dev/app_localization.dart';
-import 'package:mob_dev/theme_widgets.dart';
+import 'package:mob_dev/utils/app_localization.dart';
+import 'package:mob_dev/utils/theme_widgets.dart';
 
 class WorkoutRecorder extends StatefulWidget {
   final RecorderDatabase? database;

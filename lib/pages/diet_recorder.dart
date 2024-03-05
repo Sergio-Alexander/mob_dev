@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_dev/pages/settings.dart';
 import 'package:provider/provider.dart';
-import 'package:mob_dev/app_status.dart';
+import 'package:mob_dev/utils/app_status.dart';
 
 
 import 'package:mob_dev/floor_model/recorder_database/recorder_database.dart';
 import 'package:mob_dev/floor_model/diet_recorder/diet_recorder_entity.dart';
 
-import 'package:mob_dev/app_localization.dart';
+import 'package:mob_dev/utils/app_localization.dart';
 
-import '../theme_widgets.dart';
+import '../utils/theme_widgets.dart';
 
 
 

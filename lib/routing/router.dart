@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'pages/emotion_recorder.dart';
-import 'pages/diet_recorder.dart';
-import 'floor_model/recorder_database/recorder_database.dart';
-import 'pages/workout_recorder.dart';
+import '../pages/emotion_recorder.dart';
+import '../pages/diet_recorder.dart';
+import '../floor_model/recorder_database/recorder_database.dart';
+import '../pages/workout_recorder.dart';
 
 import 'package:provider/provider.dart';
-import 'app_status.dart';
+import 'package:mob_dev/utils/app_status.dart';
 
 import 'package:mob_dev/pages/settings.dart';
-import 'app_localization.dart';
+import '../utils/app_localization.dart';
 
-import 'pages/leaderboards.dart';
+import '../pages/leaderboards.dart';
 
-import 'pages/login.dart';
+import '../pages/login.dart';
 
 class ShellWidget extends StatefulWidget {
   final Widget child;

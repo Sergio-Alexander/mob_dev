@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'floor_model/recorder_database/recorder_database.dart';
+import '../floor_model/recorder_database/recorder_database.dart';
 
 import 'package:mob_dev/floor_model/workout_recorder/workout_recorder_entity.dart';
 import 'package:mob_dev/floor_model/diet_recorder/diet_recorder_entity.dart';
