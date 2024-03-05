@@ -2,20 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> setupFirebase() async{
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
-  bool isFirebaseConnected = Firebase.apps.isNotEmpty;
+  try{
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  if (isFirebaseConnected) {
-    print('Firebase is already connected');
-  } else {
-    print('Firebase is not connected yet');
+    print('Firebase initalized successfully');
+  } catch (e){
+    print('Firebase did not initialize');
   }
-
-
-  FirebaseApp app = Firebase.app();
-  String projectId = app.options.projectId;
-  print("Connected to firebase server: $projectId");
 }

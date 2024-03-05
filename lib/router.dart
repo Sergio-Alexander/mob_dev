@@ -11,10 +11,18 @@ import 'app_status.dart';
 import 'package:mob_dev/pages/settings.dart';
 import 'app_localization.dart';
 
+import 'pages/leaderboards.dart';
+
+import 'pages/login.dart';
+
 class ShellWidget extends StatefulWidget {
   final Widget child;
 
   const ShellWidget({Key? key, required this.child}) : super(key: key);
+
+  static _ShellWidgetState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_ShellWidgetState>();
+
 
   @override
   _ShellWidgetState createState() => _ShellWidgetState();
@@ -49,7 +57,13 @@ class StatusWidget extends StatelessWidget {
 }
 
 class _ShellWidgetState extends State<ShellWidget> {
-  int _currentIndex = 0;
+  int _currentIndex = 3;
+
+  void setIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,15 +96,24 @@ class _ShellWidgetState extends State<ShellWidget> {
             case 2:
               context.go('/workout');
               break;
+
             case 3:
+              context.go('/leaderboards');
+
+            case 4:
               context.go('/settings');
+              break;
+
           }
+
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.sentiment_very_satisfied), label: AppLocalizations.of(context).translate('emotion')),
           BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: AppLocalizations.of(context).translate('diet')),
           BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: AppLocalizations.of(context).translate('workout')),
+          BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: AppLocalizations.of(context).translate('leaderboards')),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: AppLocalizations.of(context).translate('settings')),
+
         ],
       ),
     );
@@ -98,7 +121,7 @@ class _ShellWidgetState extends State<ShellWidget> {
 }
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/emotion',
+  initialLocation: '/leaderboards',
   routes: [
     ShellRoute(
       builder: (BuildContext context, GoRouterState state, Widget child) {
@@ -127,12 +150,31 @@ final GoRouter _router = GoRouter(
             return WorkoutRecorder(database: database);
           }
         ),
+
+
+        GoRoute(
+            path: '/leaderboards',
+            builder: (BuildContext context, GoRouterState state) {
+              return LeaderboardsPage();
+            }
+        ),
+
+
         GoRoute(
             path: '/settings',
             builder: (BuildContext context, GoRouterState state) {
               return SettingsPage();
             }
         ),
+
+        GoRoute(
+          path: '/login',
+          builder: (BuildContext context, GoRouterState state) {
+            return LoginPage();
+          },
+        ),
+
+
       ],
     ),
   ],

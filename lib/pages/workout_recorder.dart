@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_dev/pages/settings.dart';
@@ -22,9 +23,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
   List<WorkoutRecorderEntity> workoutData =[];
   final TextEditingController _quantityController = TextEditingController();
   ScrollController _scrollController = ScrollController();
-  // final List<Map<String, dynamic>> workoutData = [];
-
-
   String selectedExercise = '';
 
   List<String> exercises = [];
@@ -32,8 +30,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
     super.initState();
     _loadWorkouts();
   }
-
-
 
   void didChangeDependencies(){
     super.didChangeDependencies();
@@ -63,6 +59,11 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
   }
 
   Future<void> _recordWorkout() async {
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'increment': 1, // Increment the points by 1
+    });
+
+
     WorkoutRecorderEntity? workout;
 
     final String quantity = _quantityController.text;
@@ -91,6 +92,12 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
   }
 
   Future<void> _deleteWorkout(WorkoutRecorderEntity workout) async {
+
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'decrement': 1, // Decrement the points by 1
+    });
+
+
     if(widget.database != null){
       try{
         await widget.database!.workoutRecorderDao.deleteWorkoutRecorder(workout);
@@ -123,13 +130,6 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
     return workoutNames[workoutID] ?? workoutID;
   }
 
-
-  void _clearWorkout() {
-    setState(() {
-      workoutData.clear();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,7 +137,8 @@ class _WorkoutRecorder extends State<WorkoutRecorder> {
         centerTitle: true,
         title: Text(AppLocalizations.of(context).translate('workoutRecorder')),
       ),
-      body: Column(
+      body:
+      Column(
         children: [
           Text(AppLocalizations.of(context).translate('selectExercise')),
           themedDropdownButton(

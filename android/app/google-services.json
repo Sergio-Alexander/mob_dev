@@ -12,7 +12,20 @@
           "package_name": "edu.seattleu.mob_dev"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "918904685601-1d0uhf40m7e91isk6llerntjvs8rpkd9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.seattleu.mob_dev",
+            "certificate_hash": "dbc44f120f069d65a1f737ad9307d9e4ab33cba8"
+          }
+        },
+        {
+          "client_id": "918904685601-ablmb5ec5bmj6tl44gp132bsgiso4r8d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBG7iqPIEKsg1BQLTJkhYtGSHCPpMw2tbM"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "918904685601-ablmb5ec5bmj6tl44gp132bsgiso4r8d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "918904685601-mgrtf01t4bd54q6rjcediu1v3fnvejf0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.seattleu.mobDev"
+              }
+            }
+          ]
         }
       }
     }

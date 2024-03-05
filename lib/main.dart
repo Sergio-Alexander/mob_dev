@@ -7,8 +7,13 @@ import 'app_status.dart';
 import 'floor_model/recorder_database/recorder_database.dart';
 import 'router.dart';
 import 'database_init.dart';
+import 'firebase_setup.dart';
 
-void main() {
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupFirebase();
   runApp(
     DatabaseInitializer(
       child: Builder(
@@ -35,8 +40,6 @@ void main() {
     ),
   );
 }
-
-
 
 class MyApp extends StatefulWidget {
   static _MyAppState? of(BuildContext context) =>
@@ -86,5 +89,3 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-
-// merged successfully

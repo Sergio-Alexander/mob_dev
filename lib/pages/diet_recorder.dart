@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_dev/pages/settings.dart';
@@ -49,6 +50,12 @@ class _DietRecorderState extends State<DietRecorder> {
   }
 
   Future<void> _recordDiet() async {
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'increment': 1, // Increment the points by 1
+    });
+
+
+
     DietRecorderEntity? diet;
     final String food = _foodController.text;
     final String amount = _amountController.text;
@@ -82,6 +89,10 @@ class _DietRecorderState extends State<DietRecorder> {
   }
 
   Future<void> _deleteDiet(DietRecorderEntity diet) async {
+    FirebaseFunctions.instance.httpsCallable('updatePoints').call({
+      'decrement': 1, // Decrement the points by 1
+    });
+
     if(widget.database != null){
       try{
         await widget.database!.dietRecorderDao.deleteDietRecorder(diet);
@@ -164,63 +175,6 @@ class _DietRecorderState extends State<DietRecorder> {
               child: ListView.builder(
                 itemCount: dietData.length,
                 itemBuilder: (context, index) {
-                  // return ListTile(
-                  //     title: Text(dietData[index].diet),
-                  //     subtitle: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text('${AppLocalizations.of(context).translate('amount')}: ${dietData[index].amount}'),
-                  //         Text('${AppLocalizations.of(context).translate('dateAndTime')}: ${dietData[index].timestamp.toString()}'),
-                  //       ],
-                  //     ),
-                  //     trailing: Row(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         children: [
-                  //           IconButton(
-                  //             icon: const Icon(Icons.delete),
-                  //             onPressed: () => _deleteDiet(dietData[index]),
-                  //           ),
-                  //           IconButton(
-                  //             icon: const Icon(Icons.edit),
-                  //             onPressed: () async {
-                  //               final newAmount = await showDialog<int>(
-                  //                 context: context,
-                  //                 builder: (context) {
-                  //                   final controller = TextEditingController();
-                  //                   return AlertDialog(
-                  //                     title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
-                  //                     content: TextField(
-                  //                       controller: controller,
-                  //                       keyboardType: TextInputType.number,
-                  //                       decoration: InputDecoration(
-                  //                         hintText: AppLocalizations.of(context).translate('enterAmount'),
-                  //                       ),
-                  //                     ),
-                  //                     actions: [
-                  //                       TextButton(
-                  //                         child: Text(AppLocalizations.of(context).translate('cancel')),
-                  //                         onPressed: () {
-                  //                           Navigator.of(context).pop();
-                  //                         },
-                  //                       ),
-                  //                       TextButton(
-                  //                         child: Text(AppLocalizations.of(context).translate('ok')),
-                  //                         onPressed: () {
-                  //                           Navigator.of(context).pop(int.parse(controller.text));
-                  //                         },
-                  //                       ),
-                  //                     ],
-                  //                   );
-                  //                 },
-                  //               );
-                  //               if (newAmount != null) {
-                  //                 _updateDiet(dietData[index], newAmount);
-                  //               }
-                  //             },
-                  //           ),
-                  //         ]
-                  //     )
-                  // );
                   return ListTile(
                     title: Text(dietData[index].diet),
                     subtitle: Column(
@@ -238,46 +192,6 @@ class _DietRecorderState extends State<DietRecorder> {
                           cupertinoIcon: CupertinoIcons.trash,
                           onPressed: () => _deleteDiet(dietData[index]),
                         ),
-                        // themedIconButton(
-                        //   materialIcon: Icons.edit,
-                        //   cupertinoIcon: CupertinoIcons.pencil,
-                        //   onPressed: () async {
-                        //     final newAmount = await showDialog<int>(
-                        //       context: context,
-                        //       builder: (context) {
-                        //         final controller = TextEditingController();
-                        //         return AlertDialog(
-                        //           title: Text(AppLocalizations.of(context).translate('enterNewAmount')),
-                        //           content: TextField(
-                        //             controller: controller,
-                        //             keyboardType: TextInputType.number,
-                        //             decoration: InputDecoration(
-                        //               hintText: AppLocalizations.of(context).translate('enterAmount'),
-                        //             ),
-                        //           ),
-                        //           actions: [
-                        //             TextButton(
-                        //               child: Text(AppLocalizations.of(context).translate('cancel')),
-                        //               onPressed: () {
-                        //                 Navigator.of(context).pop();
-                        //               },
-                        //             ),
-                        //             TextButton(
-                        //               child: Text(AppLocalizations.of(context).translate('ok')),
-                        //               onPressed: () {
-                        //                 Navigator.of(context).pop(int.parse(controller.text));
-                        //               },
-                        //             ),
-                        //           ],
-                        //         );
-                        //       },
-                        //     );
-                        //     if (newAmount != null) {
-                        //       _updateDiet(dietData[index], newAmount);
-                        //     }
-                        //   },
-                        // ),
-
                         themedIconButton(
                           materialIcon: Icons.edit,
                           cupertinoIcon: CupertinoIcons.pencil,
